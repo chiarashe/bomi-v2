@@ -1,0 +1,11 @@
+<div class="container mt-3">
+  <h2>Index de contenidos </h2>
+    <div class="content">
+      <% @contents.each do |content| %>
+        <h3><%= content.title %></h3>
+        <p><%= content.text %></p>
+        <p><%= content.theme_type %></p>
+        <p><%= content.content_type %></p>
+      <% end %>
+    </div>
+</div>

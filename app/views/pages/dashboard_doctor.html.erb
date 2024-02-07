@@ -1,8 +1,21 @@
 <%= render "shared/navbar_doc" %>
 <div class="container p-2">
-  <h2>Bienvenido al dashboard de doctores</h2>
+  <div class="profile">
+    <h2>Bienvenido al dashboard de doctores</h2>
 
-  <p>Nombre: <%= @doctor.first_name %></p>
-  <p>Apellido: <%= @doctor.last_name %></p>
-  <p>Celular: <%= @doctor.phone_number %></p>
+    <p>Nombre: <%= @doctor.first_name %></p>
+    <p>Apellido: <%= @doctor.last_name %></p>
+    <p>Celular: <%= @doctor.phone_number %></p>
+  </div>
+
+  <div class="contents">
+    <h3>Mis contenidos</h3>
+    <ul>
+      <% @contents.each do |content| %>
+        <li>
+          <%= link_to content.title, content_path(content) %>
+        </li>
+      <% end %>
+    </ul>
+  <%= link_to "Crear contenido", new_content_path, class: "button" %>
 </div>
