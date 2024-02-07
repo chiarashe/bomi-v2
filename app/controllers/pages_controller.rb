@@ -4,6 +4,7 @@ class PagesController < ApplicationController
 
   def dashboard_doctor
     @doctor = current_doctor
+    @contents = Content.where(doctor_id: @doctor.id)
   end
 
   def dashboard_patient

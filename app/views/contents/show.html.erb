@@ -1,0 +1,9 @@
+<div class="container">
+  <h3><%= @content.title %></h3>
+  <p><%= @content.text %></p>
+  <p><%= @content.theme_type %></p>
+  <p><%= @content.content_type %></p>
+  <%= link_to "Regresar", dashboard_doctor_path, class: "button" %>
+  <%= link_to "Editar", edit_content_path(@content), class: "button" %>
+  <%= link_to "Eliminar", content_path(@content), method: :delete, data: { confirm: "¿Estás seguro?" }, class: "button" %>
+</div>

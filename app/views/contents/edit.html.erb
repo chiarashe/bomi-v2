@@ -1,0 +1,11 @@
+<div class="container">
+  <h2>Editar contenido</h2>
+  <%= simple_form_for @content do |f| %>
+    <%= f.input :title, label:"Titulo" %>
+    <%= f.input :text, label:"Texto" %>
+    <%= f.input :theme_type, as: :select, collection: Content::THEME_TYPE, label:"Tema" %>
+    <%= f.input :content_type, as: :select, collection: Content::CONTENT_TYPE, label:"Tipo de contentido" %>
+    <%= f.button :submit %>
+  <% end %>
+  <%= link_to "Regresar", dashboard_doctor_path, class: "button" %>
+</div>
