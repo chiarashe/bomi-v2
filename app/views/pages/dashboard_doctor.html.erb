@@ -1,2 +1,8 @@
 <%= render "shared/navbar_doc" %>
-<h2>Welcome to the doctor dashboard</h2>
+<div class="container p-2">
+  <h2>Bienvenido al dashboard de doctores</h2>
+
+  <p>Nombre: <%= @doctor.first_name %></p>
+  <p>Apellido: <%= @doctor.last_name %></p>
+  <p>Celular: <%= @doctor.phone_number %></p>
+</div>
