@@ -1,9 +1,17 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+questions = [
+  'Tipo de comida',
+  '¿Te fue posible alimentarte?',
+  'Si la respuesta es no, ¿por qué?',
+  '¨Pudiste seguir las recomendaciones de tu médico?',
+  '¿Si la respuesta es no, por qué?',
+  '¿Cómo te sientes el día de hoy?',
+  '¿Alguien te acompañó?',
+  'Nivel de hambre',
+  'Nivel de saciedad',
+  '¿Tuviste un atracón?',
+  '¿Tienes una duda o pensamiento?'
+]
+
+questions.each do |question_title|
+  Question.create!(title: question_title)
+end

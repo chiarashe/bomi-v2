@@ -9,5 +9,7 @@ class PagesController < ApplicationController
 
   def dashboard_patient
     @patient = current_patient
+    @reports = @patient.reports
+    @answers = @reports.map { |report| report.answers }.flatten
   end
 end

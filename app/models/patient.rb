@@ -7,4 +7,5 @@ class Patient < ApplicationRecord
   has_many :relations
   has_many :doctors, through: :relations
   has_many :reports
+  has_many :answers, through: :reports
 end

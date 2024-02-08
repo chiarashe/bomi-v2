@@ -1,4 +1,5 @@
 <%= render "shared/navbar_patient" %>
+
 <div class="container p-2">
   <div class="profile">
     <h2>Bienvenido al dashboard de pacientes</h2>
@@ -12,3 +13,10 @@
     <%= link_to "Ver recursos", contents_path, class: "button" %>
   </div>
 </div>
+<%= link_to "Report", new_patient_report_path(@patient) %>
+
+
+<% @answers.each do |answer| %>
+  <p><%= answer.text %></p>
+<% end %>
+
