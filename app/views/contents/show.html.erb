@@ -3,6 +3,9 @@
   <p><%= @content.text %></p>
   <p><%= @content.theme_type %></p>
   <p><%= @content.content_type %></p>
+  <% @content.photos.each do |photo| %>
+  <%= cl_image_tag photo.key, height: 300, width: 400, crop: :fill %>
+  <% end %>
   <%= link_to "Regresar", dashboard_doctor_path, class: "button" %>
   <%= link_to "Editar", edit_content_path(@content), class: "button" %>
   <%= link_to "Eliminar", content_path(@content), method: :delete, data: { confirm: "¿Estás seguro?" }, class: "button" %>
