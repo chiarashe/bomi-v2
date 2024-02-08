@@ -10,8 +10,9 @@ class ReportsController < ApplicationController
     @report = @patient.reports.build(report_params)
     Question.all.each do |question|
       answer = @report.answers.build(question_id: question.id)
-      answer.patient = @patient
+      answer.patient_id = @patient.id
     end
+
     if @report.save
       redirect_to dashboard_patient_path, notice: 'Report was successfully created.'
     else
@@ -23,10 +24,10 @@ class ReportsController < ApplicationController
   private
 
   def set_patient
-    @patient = current_patient
+    @patient = Patient.find(params[:patient_id])
   end
 
   def report_params
-    params.require(:report).permit(:date, answers_attributes: [:text, :question_id])
+    params.require(:report).permit(:date, answers_attributes: [:text, :question_id, :patient_id])
   end
 end
