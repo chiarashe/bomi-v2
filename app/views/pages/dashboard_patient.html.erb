@@ -1,8 +1,13 @@
 <%= render "shared/navbar_patient" %>
 <div class="container p-2">
-  <h2>Bienvenido al dashboard de pacientes</h2>
+  <div class="profile">
+    <h2>Bienvenido al dashboard de pacientes</h2>
+      <p>Nombre: <%= @patient.first_name %></p>
+      <p>Apellido: <%= @patient.last_name %></p>
+      <p>Meta: <%= @patient.goal %></p>
+  </div>
 
-  <p>Nombre: <%= @patient.first_name %></p>
-  <p>Apellido: <%= @patient.last_name %></p>
-  <p>Meta: <%= @patient.goal %></p>
+  <div class="all-content">
+    <%= link_to "Ver recursos", contents_path, class: "button" %>
+  </div>
 </div>
