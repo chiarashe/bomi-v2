@@ -1,3 +1,3 @@
 class Question < ApplicationRecord
-  belongs_to :report
+  has_many :answers
 end
