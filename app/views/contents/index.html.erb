@@ -6,6 +6,8 @@
         <p><%= content.text %></p>
         <p><%= content.theme_type %></p>
         <p><%= content.content_type %></p>
+        <p><%= content.doctor.first_name %> <%= content.doctor.last_name %></p>
       <% end %>
     </div>
+  <%= link_to "Regresar", dashboard_patient_path, class: "button" %>
 </div>

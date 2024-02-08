@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :doctors
-  devise_for :patients
+  devise_for :doctors, controllers: { registrations: 'doctors/registrations' }
+  devise_for :patients, controllers: { registrations: 'patients/registrations' }
   root to: "pages#home"
   get "dashboard/doctor", to: "pages#dashboard_doctor"
   get "dashboard/patient", to: "pages#dashboard_patient"
