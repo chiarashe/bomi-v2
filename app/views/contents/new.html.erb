@@ -6,6 +6,8 @@
     <%= f.input :theme_type, as: :select, collection: Content::THEME_TYPE, label:"Tema" %>
     <%= f.input :content_type, as: :select, collection: Content::CONTENT_TYPE, label:"Tipo de contentido" %>
     <%= f.input :photos, as: :file, input_html: { multiple: true } %>
+    <%= f.input :attachments, as: :file, input_html: { multiple: true } %>
+    <%= f.input :youtube_id, label: "YouTube Video" %>
     <%= f.button :submit %>
   <% end %>
   <%= link_to "Regresar", dashboard_doctor_path, class: "button" %>

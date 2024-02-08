@@ -6,6 +6,9 @@
     <p>Nombre: <%= @doctor.first_name %></p>
     <p>Apellido: <%= @doctor.last_name %></p>
     <p>Celular: <%= @doctor.phone_number %></p>
+    <p>Profesion: <%= @doctor.profession %></p>
+    <p>Pais: <%= @doctor.location %></p>
+    <%= link_to "Cambiar información", edit_doctor_registration_path, class: "button" %>
   </div>
 
   <div class="contents">

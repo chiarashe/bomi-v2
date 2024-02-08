@@ -5,6 +5,7 @@
       <p>Nombre: <%= @patient.first_name %></p>
       <p>Apellido: <%= @patient.last_name %></p>
       <p>Meta: <%= @patient.goal %></p>
+      <%= link_to "Cambiar información", edit_patient_registration_path, class: "button" %>
   </div>
 
   <div class="all-content">

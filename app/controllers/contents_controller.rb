@@ -41,6 +41,6 @@ class ContentsController < ApplicationController
   private
 
   def content_params
-    params.require(:content).permit(:title, :text, :link_video, :content_type, :theme_type, :doctor_id, :files, photos: [])
+    params.require(:content).permit(:title, :text, :link_video, :content_type, :theme_type, :doctor_id, :files, :youtube_id, photos: [], attachments: [])
   end
 end

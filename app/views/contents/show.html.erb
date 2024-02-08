@@ -4,9 +4,17 @@
   <p><%= @content.theme_type %></p>
   <p><%= @content.content_type %></p>
   <% @content.photos.each do |photo| %>
-  <%= cl_image_tag photo.key, height: 300, width: 400, crop: :fill %>
+    <%= cl_image_tag photo.key, height: 300, width: 400, crop: :fill %>
+  <% end %>
+  <% @content.attachments.each do |attachment| %>
+    <% if attachment.content_type.start_with? 'application/pdf' %>
+      <%= link_to attachment.filename.to_s, url_for(attachment), target: "_blank" %>
+    <% end %>
+  <% end %>
+  <% if @content.youtube_id.present? %>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/<%= @content.youtube_id %>" frameborder="0" allowfullscreen></iframe>
   <% end %>
   <%= link_to "Regresar", dashboard_doctor_path, class: "button" %>
   <%= link_to "Editar", edit_content_path(@content), class: "button" %>
-  <%= link_to "Eliminar", content_path(@content), method: :delete, data: { confirm: "¿Estás seguro?" }, class: "button" %>
+  <%= link_to "Eliminar", content_path(@content), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "shareable-link mb-3 text-decoration-none ms-5"%>
 </div>
