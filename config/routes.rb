@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
+
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
-  devise_for :doctors
-  devise_for :patients
+  devise_for :doctors, controllers: { registrations: 'doctors/registrations' }
+  devise_for :patients, controllers: { registrations: 'patients/registrations' }
+
   root to: "pages#home"
   get "dashboard/doctor", to: "pages#dashboard_doctor"
   get "dashboard/patient", to: "pages#dashboard_patient"
@@ -13,12 +15,12 @@ Rails.application.routes.draw do
 
   resources :doctors, only: [:index, :show, :new, :create, :edit, :update, :destroy]
   resources :patients, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
-    resources :reports, only: [:index, :show, :new, :create, :edit, :update, :destroy]
+    resources :reports, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
+      resources :questions
+    end
   end
 
   resources :relations, only: [:index, :show, :new, :create, :edit, :update, :destroy]
   resources :contents, only: [:index, :show, :new, :create, :edit, :update, :destroy]
   resources :recommendations, only: [:index, :show, :new, :create, :edit, :update, :destroy]
-  # Defines the root path route ("/")
-  # root "posts#index"
 end

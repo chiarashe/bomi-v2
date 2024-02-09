@@ -5,35 +5,38 @@
 
     <div class="form-inputs">
       <% if resource.is_a?(Doctor) %>
-        <%= f.input :first_name, required: true %>
-        <%= f.input :last_name, required: true %>
-        <%= f.input :phone_number, required: true %>
+        <%= f.input :first_name, label:"Nombre", required: true %>
+        <%= f.input :last_name, label:"Apellido", required: true %>
+        <%= f.input :phone_number, label:"Celular", required: true %>
         <%= f.input :cedula_profesional, required: true %>
-        <%= f.input :curp, required: true %>
-        <%= f.input :profession, required: true %>
-        <%= f.input :location, required: true %>
+        <%= f.input :curp, label:"CURP", required: true %>
+        <%= f.input :profession, as: :select, collection: Doctor::PROFESSION, label:"Profesion", required: true %>
+        <%= f.input :location, label:"Pais", required: true %>
       <% elsif resource.is_a?(Patient) %>
-        <%= f.input :first_name, required: true %>
-        <%= f.input :last_name, required: true %>
-        <%= f.input :phone_number, required: true %>
-        <%= f.input :goal, required: true %>
-        <%= f.input :location, required: true %>
+        <%= f.input :first_name, label:"Nombre", required: true %>
+        <%= f.input :last_name, label:"Apellido", required: true %>
+        <%= f.input :phone_number, label:"Celular", required: true %>
+        <%= f.input :goal, label:"Meta", required: true %>
+        <%= f.input :location, label:"Pais", required: true %>
       <% end %>
       <%= f.input :email,
                   required: true,
                   autofocus: true,
+                  label: "Correo",
                   input_html: { autocomplete: "email" }%>
       <%= f.input :password,
                   required: true,
-                  hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length),
+                  label: "Contraseña",
+                  hint: ("#{@minimum_password_length} caracteres mínimo" if @minimum_password_length),
                   input_html: { autocomplete: "new-password" } %>
       <%= f.input :password_confirmation,
                   required: true,
+                  label: "Confirmación de contraseña",
                   input_html: { autocomplete: "new-password" } %>
     </div>
 
     <div class="form-actions">
-      <%= f.button :submit, "Sign up" %>
+      <%= f.button :submit, "Registrarse" %>
     </div>
   <% end %>
 

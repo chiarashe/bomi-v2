@@ -9,7 +9,15 @@
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
       <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
     <% end %>
-
+    <% if resource.is_a?(Doctor) %>
+        <%= f.input :phone_number, label:"Celular", required: false %>
+        <%= f.input :profession, as: :select, collection: Doctor::PROFESSION, label:"Profesion", required: false %>
+        <%= f.input :location, label:"Pais", required: false %>
+      <% elsif resource.is_a?(Patient) %>
+        <%= f.input :phone_number, label:"Celular", required: false %>
+        <%= f.input :goal, label:"Meta", required: false %>
+        <%= f.input :location, label:"Pais", required: false %>
+      <% end %>
     <%= f.input :password,
                 hint: "leave it blank if you don't want to change it",
                 required: false,

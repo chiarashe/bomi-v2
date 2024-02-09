@@ -1,8 +1,22 @@
 <%= render "shared/navbar_patient" %>
-<div class="container p-2">
-  <h2>Bienvenido al dashboard de pacientes</h2>
 
-  <p>Nombre: <%= @patient.first_name %></p>
-  <p>Apellido: <%= @patient.last_name %></p>
-  <p>Meta: <%= @patient.goal %></p>
+<div class="container p-2">
+  <div class="profile">
+    <h2>Bienvenido al dashboard de pacientes</h2>
+      <p>Nombre: <%= @patient.first_name %></p>
+      <p>Apellido: <%= @patient.last_name %></p>
+      <p>Meta: <%= @patient.goal %></p>
+      <%= link_to "Cambiar información", edit_patient_registration_path, class: "button" %>
+  </div>
+
+  <div class="all-content">
+    <%= link_to "Ver recursos", contents_path, class: "button" %>
+  </div>
 </div>
+<%= link_to "Report", new_patient_report_path(@patient) %>
+
+
+<% @answers.each do |answer| %>
+  <p><%= answer.text %></p>
+<% end %>
+

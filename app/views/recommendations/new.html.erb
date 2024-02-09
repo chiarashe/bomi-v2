@@ -1,0 +1,11 @@
+<div class="container">
+  <h2>Agregar una recomendación </h2>
+ <%= simple_form_for @recommendation do |f| %>
+    <%= f.input :title, label:"Titulo" %>
+    <%= f.input :comments, label:"Commentario" %>
+    <%= f.input :link_content, label:"Liga de contenido" %>
+    <%= f.input :attachment, as: :file %>
+    <%= f.button :submit %>
+  <% end %>
+  <%= link_to "Regresar", dashboard_doctor_path, class: "button" %>
+</div>

@@ -11,8 +11,52 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.1].define(version: 2024_02_08_232128) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "answers", force: :cascade do |t|
+    t.string "text"
+    t.bigint "patient_id"
+    t.bigint "question_id", null: false
+    t.bigint "report_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["patient_id"], name: "index_answers_on_patient_id"
+    t.index ["question_id"], name: "index_answers_on_question_id"
+    t.index ["report_id"], name: "index_answers_on_report_id"
+
+  end
 
   create_table "contents", force: :cascade do |t|
     t.string "title"
@@ -23,6 +67,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_08_232128) do
     t.bigint "doctor_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "youtube_id"
     t.index ["doctor_id"], name: "index_contents_on_doctor_id"
   end
 
@@ -69,11 +114,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_08_232128) do
 
   create_table "questions", force: :cascade do |t|
     t.string "title"
-    t.string "answer"
-    t.bigint "report_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["report_id"], name: "index_questions_on_report_id"
   end
 
   create_table "recommendations", force: :cascade do |t|
@@ -102,11 +144,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_08_232128) do
     t.bigint "patient_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "date"
     t.index ["patient_id"], name: "index_reports_on_patient_id"
   end
 
+
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+
+  add_foreign_key "answers", "patients"
+  add_foreign_key "answers", "questions"
+  add_foreign_key "answers", "reports"
+
   add_foreign_key "contents", "doctors"
-  add_foreign_key "questions", "reports"
   add_foreign_key "recommendations", "doctors"
   add_foreign_key "recommendations", "reports"
   add_foreign_key "relations", "doctors"

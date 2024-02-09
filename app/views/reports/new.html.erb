@@ -1,0 +1,32 @@
+<h1>Daily report</h1>
+
+<div class="container" data-controller="questions">
+  <%= form_with(model: [@patient, @report], local: true) do |form| %>
+    <%= form.label :date %>
+    <%= form.date_field :date %>
+
+    <div class="d-flex flex-column">
+      <%= form.fields_for :answers do |answer_fields| %>
+        <%= answer_fields.hidden_field :question_id %>
+        <%= answer_fields.label :text, Question.find(answer_fields.object.question.id).title %>
+        <% if answer_fields.object.question_id == 2 %>
+          <%= answer_fields.select :text, ["Sí", "No"], {}, { class: "form-control", data: { action: "change->questions#checkQuestion2", "questions-target": "question2" } }%>
+        <% elsif answer_fields.object.question_id == 3 %>
+          <div data-questions-target="question3" class="d-none">
+            <%= answer_fields.text_field :text %>
+          </div>
+        <% elsif answer_fields.object.question_id == 4 %>
+          <%= answer_fields.select :text, ["Sí", "No"], {}, { class: "form-control", data: { action: "change->questions#checkQuestion4", "questions-target": "question4" } }%>
+        <% elsif answer_fields.object.question_id == 5 %>
+          <div data-questions-target="question5" class="d-none">
+            <%= answer_fields.text_field :text %>
+          </div>
+        <% else %>
+          <%= answer_fields.text_field :text %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <%= form.submit %>
+  <% end %>
+</div>
