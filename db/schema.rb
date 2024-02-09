@@ -10,7 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_08_004546) do
+
+ActiveRecord::Schema[7.1].define(version: 2024_02_08_232128) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +42,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_08_004546) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end 
+
+  create_table "answers", force: :cascade do |t|
+    t.string "text"
+    t.bigint "patient_id"
+    t.bigint "question_id", null: false
+    t.bigint "report_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["patient_id"], name: "index_answers_on_patient_id"
+    t.index ["question_id"], name: "index_answers_on_question_id"
+    t.index ["report_id"], name: "index_answers_on_report_id"
   end
 
   create_table "contents", force: :cascade do |t|
@@ -90,6 +104,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_08_004546) do
     t.string "phone_number"
     t.string "link"
     t.string "goal"
+    t.boolean "admin", default: false, null: false
     t.index ["email"], name: "index_patients_on_email", unique: true
     t.index ["reset_password_token"], name: "index_patients_on_reset_password_token", unique: true
   end
