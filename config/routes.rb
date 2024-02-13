@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   root to: "pages#home"
   get "dashboard/doctor", to: "pages#dashboard_doctor"
   get "dashboard/patient", to: "pages#dashboard_patient"
+  get '/shared/:id', to: 'shared#show', as: 'shared'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

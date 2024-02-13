@@ -20,3 +20,8 @@
   <p><%= answer.text %></p>
 <% end %>
 
+<h3>Your QR Code</h3>
+<%= link_to "Go to shared page (temporary button)", shared_path(@patient) %>
+<div>
+  <%= raw @svg %>
+</div>

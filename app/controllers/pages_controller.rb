@@ -1,3 +1,4 @@
+require 'rqrcode'
 class PagesController < ApplicationController
   def home
   end
@@ -10,6 +11,9 @@ class PagesController < ApplicationController
   def dashboard_patient
     @patient = current_patient
     @reports = @patient.reports
-    @answers = @reports.map { |report| report.answers }.flatten
+    @report = @patient.reports.order(created_at: :desc).first
+    @answers = @report.answers if @report
+    qr = RQRCode::QRCode.new(shared_url(@patient), size: 4, level: :h)
+    @svg = qr.as_svg(offset: 0, color: '000', shape_rendering: 'crispEdges', module_size: 6)
   end
 end

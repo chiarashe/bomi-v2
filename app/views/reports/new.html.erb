@@ -21,8 +21,10 @@
           <div data-questions-target="question5" class="d-none">
             <%= answer_fields.text_field :text %>
           </div>
+        <% elsif answer_fields.object.question_id == 1 %>
+        <%= answer_fields.text_field :text %>
         <% else %>
-          <%= answer_fields.text_field :text %>
+          <%= answer_fields.number_field :text %>
         <% end %>
       <% end %>
     </div>
