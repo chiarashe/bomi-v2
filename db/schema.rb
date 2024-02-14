@@ -10,9 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
 ActiveRecord::Schema[7.1].define(version: 2024_02_08_232128) do
-
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,7 +40,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_08_232128) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
-  end 
+  end
 
   create_table "answers", force: :cascade do |t|
     t.string "text"
@@ -65,6 +63,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_08_232128) do
     t.bigint "doctor_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "youtube_id"
     t.index ["doctor_id"], name: "index_contents_on_doctor_id"
   end
 
@@ -111,11 +110,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_08_232128) do
 
   create_table "questions", force: :cascade do |t|
     t.string "title"
-    t.string "answer"
-    t.bigint "report_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["report_id"], name: "index_questions_on_report_id"
   end
 
   create_table "recommendations", force: :cascade do |t|
@@ -144,13 +140,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_08_232128) do
     t.bigint "patient_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "date"
     t.index ["patient_id"], name: "index_reports_on_patient_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "answers", "patients"
+  add_foreign_key "answers", "questions"
+  add_foreign_key "answers", "reports"
   add_foreign_key "contents", "doctors"
-  add_foreign_key "questions", "reports"
   add_foreign_key "recommendations", "doctors"
   add_foreign_key "recommendations", "reports"
   add_foreign_key "relations", "doctors"
