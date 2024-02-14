@@ -22,9 +22,25 @@
             <%= answer_fields.text_field :text %>
           </div>
         <% elsif answer_fields.object.question_id == 1 %>
-        <%= answer_fields.text_field :text %>
+          <%= answer_fields.select :text, ["Desayuno", "Almuerzo", "Comida", "Cena"], {}, { class: "form-control" } %>
+        <% elsif answer_fields.object.question_id == 6 %>
+          <%= answer_fields.label :text, "Bad" %>
+          <%= answer_fields.range_field :text, in: 0..10, step: 1, class: "form-control-range" %>
+          <%= answer_fields.label :text, "Good" %>
+        <% elsif answer_fields.object.question_id == 7 %>
+          <%= answer_fields.select :text, ["Sí", "No"], {}, data: { class: "form-control"} %>
+        <% elsif answer_fields.object.question_id == 8 %>
+          <%= answer_fields.label :text, "Bad" %>
+          <%= answer_fields.range_field :text, in: 0..10, step: 1, class: "form-control-range" %>
+          <%= answer_fields.label :text, "Good" %>
+        <% elsif answer_fields.object.question_id == 9 %>
+          <%= answer_fields.label :text, "Bad" %>
+          <%= answer_fields.range_field :text, in: 0..10, step: 1, class: "form-control-range" %>
+          <%= answer_fields.label :text, "Good" %>
+        <% elsif answer_fields.object.question_id == 10 %>
+          <%= answer_fields.select :text, ["Sí", "No"], {}, data: { class: "form-control"} %>
         <% else %>
-          <%= answer_fields.number_field :text %>
+          <%= answer_fields.text_field :text %>
         <% end %>
       <% end %>
     </div>
