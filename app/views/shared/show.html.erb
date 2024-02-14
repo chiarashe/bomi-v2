@@ -1,4 +1,10 @@
 <div>
   <h1>This is the shared view between patient and doctor</h1>
   <h3><%= @patient.first_name %></h3>
+    <h3>Answers</h3>
+    <ul>
+      <% @answers.each do |answer| %>
+        <li><%= answer.text %></li>
+      <% end %>
+    </ul>
 </div>
