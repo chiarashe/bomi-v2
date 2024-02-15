@@ -7,4 +7,8 @@
         <li><%= answer.text %></li>
       <% end %>
     </ul>
+    <%= pie_chart({"No" => @no_count, "Sí" => @si_count}) %>
+    <%= pie_chart({"Desayuno" => @desayuno_count, "Almuerzo" => @almuerzo_count, "Comida" => @comida_count, "Cena" => @cena_count}) %>
+    <%= scatter_chart @answers_8.zip(@answers_9), xtitle: "Hambre", ytitle: "Saciedad" %>
+
 </div>
