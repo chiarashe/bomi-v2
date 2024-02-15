@@ -3,17 +3,18 @@ class ReportsController < ApplicationController
 
   def new
     @report = Report.new
-    Question.all.each { |question| @report.answers.build(question_id: question.id) }
+    Question.all.each do |question|
+      @report.answers.build(question_id: question.id, patient_id: @patient.id)
+    end
   end
 
   def create
     @report = @patient.reports.build(report_params)
-    Question.all.each do |question|
-      answer = @report.answers.build(question_id: question.id)
-      answer.patient_id = @patient.id
-    end
 
     if @report.save
+      @report.answers.each do |answer|
+        answer.update(patient_id: @patient.id)
+      end
       redirect_to dashboard_patient_path, notice: 'Report was successfully created.'
     else
       puts @report.errors.full_messages
@@ -28,6 +29,6 @@ class ReportsController < ApplicationController
   end
 
   def report_params
-    params.require(:report).permit(:date, answers_attributes: [:text, :question_id, :patient_id])
+    params.require(:report).permit(:date, answers_attributes: [:id, :text, :question_id, :patient_id])
   end
 end

@@ -85,4 +85,4 @@ gem "tailwindcss-rails", "~> 2.3"
 
 gem "rails_admin", "3.0"
 
-gem "sassc-rails"
+gem "chartkick"

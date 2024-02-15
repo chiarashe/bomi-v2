@@ -11,8 +11,9 @@ class RecommendationsController < ApplicationController
   def create
     @recommendation = Recommendation.new(recommendation_params)
     @recommendation.doctor = current_doctor
+    @recommendation.patient = @patient
     if @recommendation.save
-      redirect_to recommendation_path(@recommendation)
+      redirect_to @patient
     else
       render :new
     end
@@ -41,6 +42,6 @@ class RecommendationsController < ApplicationController
   private
 
   def recommendation_params
-    params.require(:recommendation).permit(:title, :comments, :link_content, :done, :report_id, :doctor_id, :attachment)
+    params.require(:recommendation).permit(:title, :comments, :link_content, :done, :report_id, :doctor_id, :attachment, :text)
   end
 end
