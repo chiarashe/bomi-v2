@@ -1,6 +1,10 @@
 class SharedController < ApplicationController
+  before_action :authenticate_patient!
   def show
     @patient = Patient.find(params[:id])
+    unless current_patient == @patient
+      redirect_to dashboard_patient_path, alert: 'You are not authorized to view this page'
+    end
     @doctor = current_doctor
     if @doctor && !Relation.exists?(patient: @patient, doctor: @doctor)
       Relation.create(patient: @patient, doctor: @doctor)

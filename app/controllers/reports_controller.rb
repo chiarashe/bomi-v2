@@ -1,8 +1,10 @@
 class ReportsController < ApplicationController
+  include Devise::Controllers::Helpers
   before_action :set_patient
 
   def new
-    @report = Report.new
+    @report = Report.new(patient: @patient)
+    authorize @report
     Question.all.each do |question|
       @report.answers.build(question_id: question.id, patient_id: @patient.id)
     end
@@ -10,7 +12,7 @@ class ReportsController < ApplicationController
 
   def create
     @report = @patient.reports.build(report_params)
-
+    authorize @report
     if @report.save
       @report.answers.each do |answer|
         answer.update(patient_id: @patient.id)

@@ -1,6 +1,21 @@
 class ApplicationController < ActionController::Base
+  # before_action :authenticate_doctor!
   before_action :configure_permitted_parameters, if: :devise_controller?
+  include Pundit::Authorization
 
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
+  private
+
+  def user_not_authorized
+    redirect_to dashboard_patient_path, alert: "You are not authorized to perform this action."
+  end
+
+  def current_user
+    @current_user ||= current_doctor || current_patient
+  end
+
+  helper_method :current_user
   protected
 
   def configure_permitted_parameters
