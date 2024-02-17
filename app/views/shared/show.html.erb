@@ -1,6 +1,13 @@
 <div>
-  <h1>This is the shared view between patient and doctor</h1>
-  <h3><%= @patient.first_name %></h3>
+  <h3>This is the shared view between patient and doctor</h3>
+  <% if patient_signed_in? %>
+    <h4>You are viewing this page as a patient</h4>
+  <% elsif doctor_signed_in? %>
+    <h4>You are viewing this page as a doctor</h4>
+  <% else %>
+    <h4>There is no user logged in</h4>
+  <% end %>
+  <h1><%= @patient.first_name %></h1>
     <h3>Answers</h3>
     <ul>
       <% @answers.each do |answer| %>
@@ -10,5 +17,4 @@
     <%= pie_chart({"No" => @no_count, "Sí" => @si_count}) %>
     <%= pie_chart({"Desayuno" => @desayuno_count, "Almuerzo" => @almuerzo_count, "Comida" => @comida_count, "Cena" => @cena_count}) %>
     <%= scatter_chart @answers_8.zip(@answers_9), xtitle: "Hambre", ytitle: "Saciedad" %>
-
 </div>

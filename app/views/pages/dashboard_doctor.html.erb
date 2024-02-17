@@ -11,6 +11,13 @@
     <%= link_to "Cambiar información", edit_doctor_registration_path, class: "button" %>
   </div>
 
+  <h3>Mis pacientes</h3>
+  <ul>
+    <% @doctor.patients.each do |patient| %>
+    <li><%= patient.first_name %></li>
+    <% end %>
+  </ul>
+
   <div class="contents">
     <h3>Mis contenidos</h3>
     <ul>

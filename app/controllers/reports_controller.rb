@@ -27,7 +27,7 @@ class ReportsController < ApplicationController
   private
 
   def set_patient
-    @patient = Patient.find(params[:patient_id])
+    @patient = current_patient
   end
 
   def report_params

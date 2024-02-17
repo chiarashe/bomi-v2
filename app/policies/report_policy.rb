@@ -1,9 +1,9 @@
 class ReportPolicy < ApplicationPolicy
   def new?
-    user == record.patient
+    user.present?
   end
 
   def create?
-    user == record.patient
+    user.present?
   end
 end
