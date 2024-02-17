@@ -15,8 +15,12 @@
 </div>
 <%= link_to "Report", new_patient_report_path(@patient) %>
 
-<% @answers.each do |answer| %>
-  <p><%= answer.text %></p>
+<% if @answers %>
+  <% @answers.each do |answer| %>
+    <p><%= answer.text %></p>
+  <% end %>
+<% else %>
+  <p>No answers yet.</p>
 <% end %>
 
 <h3>Your QR Code</h3>
