@@ -1,14 +1,66 @@
 <div>
   <h1>This is the shared view between patient and doctor</h1>
   <h3><%= @patient.first_name %></h3>
-    <h3>Answers</h3>
-    <ul>
-      <% @answers.each do |answer| %>
-        <li><%= answer.text %></li>
-      <% end %>
-    </ul>
-    <%= pie_chart({"No" => @no_count, "Sí" => @si_count}) %>
-    <%= pie_chart({"Desayuno" => @desayuno_count, "Almuerzo" => @almuerzo_count, "Comida" => @comida_count, "Cena" => @cena_count}) %>
-    <%= scatter_chart @answers_8.zip(@answers_9), xtitle: "Hambre", ytitle: "Saciedad" %>
+<h3>Answers</h3>
+<% @answers.group_by(&:report_id).each do |report_id, answers| %>
+  <h4>Report <%= report_id %></h4>
+    <% if answers.first && answers.first.report && answers.first.report.date %>
+      <p>Report Date: <%= answers.first.report.date.to_date.to_s %></p>
+    <% end %>
+  <ul>
+    <% answers.each do |answer| %>
+      <li><%= answer.text %></li>
+    <% end %>
+  </ul>
+<% end %>
 
-</div>
+    <h3>Grafícas</h3>
+
+    <% # pudiste alimentarte graficas %>
+    <div class="d-flex justify-content-center">
+      <div class="col-3 p-2">
+        <h4>Pudiste alimentarte?</h4>
+        <%= pie_chart({"No" => @no_count_2, "Sí" => @si_count_2}, width: "200px", height: "200px") %>
+      </div>
+
+      <div class="col-3 p-2">
+        <h4>Alimentarte? vs tipo de comida</h4>
+        <%= column_chart @data, xtitle: "Tipo de Comida", ytitle: "Yes/No", width: "350px", height: "250px" %>
+      </div>
+    <% # tuviste un atracón graficas %>
+      <div class="col-3 p-2">
+        <h4>Atracones?</h4>
+        <%= pie_chart({"No" => @no_count_10, "Sí" => @si_count_10}, width: "200px", height: "200px") %>
+      </div>
+
+      <div class="col-3 p-2">
+        <h4>Atracones vs tipo de comida?</h4>
+        <%= column_chart @data_10, xtitle: "Tipo de Comida", ytitle: "Yes/No", width: "350px", height: "250px" %>
+      </div>
+    </div>
+
+    <% # Hambre saciedad emociones graficas %>
+    <div class="d-flex justify-content-center">
+      <div class="col-4 p-5">
+        <%= scatter_chart @answers_8.zip(@answers_9), xtitle: "Hambre", ytitle: "Saciedad" %>
+      </div>
+      <div class="col-4 p-5">
+        <%= column_chart @data_8, xtitle: "Emoción", ytitle: "Hambre", width: "350px", height: "250px" %>
+      </div>
+    </div>
+
+    <% # Grafica completado diario %>
+    <div class="d-flex justify-content-center">
+      <div class="col-6 p-5">
+        <%= line_chart Report.group_by_day(:created_at).count %>
+      </div>
+    </div>
+
+<h3>Red flags</h3>
+<% if @yes_dates.empty? %>
+  <p>No dates found</p>
+<% else %>
+  <% @yes_dates.each do |date| %>
+    <p><%= date.to_s %></p>
+  <% end %>
+<% end %>

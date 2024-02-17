@@ -22,21 +22,27 @@
             <%= answer_fields.text_field :text %>
           </div>
         <% elsif answer_fields.object.question_id == 1 %>
-          <%= answer_fields.select :text, ["Desayuno", "Almuerzo", "Comida", "Cena"], {}, { class: "form-control" } %>
+          <%= answer_fields.select :text, ["Desayuno", "Snack", "Comida", "Cena"], {}, { class: "form-control" } %>
         <% elsif answer_fields.object.question_id == 6 %>
-          <%= answer_fields.label :text, "Bad" %>
-          <%= answer_fields.range_field :text, in: 0..10, step: 1, class: "form-control-range" %>
-          <%= answer_fields.label :text, "Good" %>
+          <div style="display: flex; align-items: center;">
+            <%= answer_fields.label :text, "Muy mal", style: "margin-right: 10px;" %>
+            <%= answer_fields.range_field :text, in: 0..5, step: 1, class: "form-control-range", style: "width: 80%;" %>
+            <%= answer_fields.label :text, "Muy bien", style: "margin-left: 10px;" %>
+          </div>
         <% elsif answer_fields.object.question_id == 7 %>
-          <%= answer_fields.select :text, ["Sí", "No"], {}, data: { class: "form-control"} %>
+          <%= answer_fields.select :text, ["Solo/a", "Pareja", "Familia", "Amigo/a(s)", "Compañero/a de trabajo/escuela", "Otro"], {}, data: { class: "form-control"} %>
         <% elsif answer_fields.object.question_id == 8 %>
-          <%= answer_fields.label :text, "Bad" %>
-          <%= answer_fields.range_field :text, in: 0..10, step: 1, class: "form-control-range" %>
-          <%= answer_fields.label :text, "Good" %>
+          <div style="display: flex; align-items: center;">
+            <%= answer_fields.label :text, "Nada de hambre", style: "margin-right: 10px;" %>
+            <%= answer_fields.range_field :text, in: 0..5, step: 1, class: "form-control-range", style: "width: 80%;" %>
+            <%= answer_fields.label :text, "Mucha hambre", style: "margin-left: 10px;" %>
+          </div>
         <% elsif answer_fields.object.question_id == 9 %>
-          <%= answer_fields.label :text, "Bad" %>
-          <%= answer_fields.range_field :text, in: 0..10, step: 1, class: "form-control-range" %>
-          <%= answer_fields.label :text, "Good" %>
+          <div style="display: flex; align-items: center;">
+            <%= answer_fields.label :text, "Nada lleno/a", style: "margin-right: 10px;" %>
+            <%= answer_fields.range_field :text, in: 0..10, step: 1, class: "form-control-range", style: "width: 80%;" %>
+            <%= answer_fields.label :text, "Muy lleno/a", style: "margin-left: 10px;"%>
+          </div>
         <% elsif answer_fields.object.question_id == 10 %>
           <%= answer_fields.select :text, ["Sí", "No"], {}, data: { class: "form-control"} %>
         <% else %>
