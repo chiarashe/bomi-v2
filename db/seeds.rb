@@ -2,7 +2,7 @@ questions = [
   'Tipo de comida',
   '¿Te fue posible alimentarte?',
   'Si la respuesta es no, ¿por qué?',
-  '¨Pudiste seguir las recomendaciones de tu médico?',
+  'Pudiste seguir las recomendaciones de tu médico?',
   '¿Si la respuesta es no, por qué?',
   '¿Cómo te sientes el día de hoy?',
   '¿Alguien te acompañó?',
