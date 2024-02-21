@@ -1,0 +1,12 @@
+<h3>Answers</h3>
+<% @answers.group_by(&:report_id).each do |report_id, answers| %>
+  <h4>Report <%= report_id %></h4>
+    <% if answers.first && answers.first.report && answers.first.report.date %>
+      <p>Report Date: <%= answers.first.report.date.to_date.to_s %></p>
+    <% end %>
+  <ul>
+    <% answers.each do |answer| %>
+      <li><%= answer.text %></li>
+    <% end %>
+  </ul>
+<% end %>

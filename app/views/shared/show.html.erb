@@ -1,21 +1,18 @@
 <div>
+
+  <% #filter %>
   <h1>This is the shared view between patient and doctor</h1>
+    <%= form_tag('', method: :get) do %>
+      <label for="start_date">Start date:</label>
+      <%= date_field_tag 'start_date', params[:start_date] %>
+      <label for="end_date">End date:</label>
+      <%= date_field_tag 'end_date', params[:end_date] %>
+      <%= submit_tag 'Filter' %>
+    <% end %>
+
   <h3><%= @patient.first_name %></h3>
-<h3>Answers</h3>
-<% @answers.group_by(&:report_id).each do |report_id, answers| %>
-  <h4>Report <%= report_id %></h4>
-    <% if answers.first && answers.first.report && answers.first.report.date %>
-      <p>Report Date: <%= answers.first.report.date.to_date.to_s %></p>
-    <% end %>
-  <ul>
-    <% answers.each do |answer| %>
-      <li><%= answer.text %></li>
-    <% end %>
-  </ul>
-<% end %>
 
     <h3>Grafícas</h3>
-
     <% # pudiste alimentarte graficas %>
     <div class="d-flex justify-content-center">
       <div class="col-3 p-2">
@@ -56,11 +53,89 @@
       </div>
     </div>
 
+
 <h3>Red flags</h3>
-<% if @yes_dates.empty? %>
+<h4>Atracones</h4>
+<% if @yes_dates_atracon.empty? %>
   <p>No dates found</p>
 <% else %>
-  <% @yes_dates.each do |date| %>
-    <p><%= date.to_s %></p>
+  <% @yes_dates_atracon.each do |date| %>
+    <% if date %>
+      <% report = Report.find_by(date: date, patient_id: @patient.id) %>
+      <% answer_1 = Answer.find_by(report_id: report.id, question_id: 1) %>
+      <% answer_6 = Answer.find_by(report_id: report.id, question_id: 6) %>
+      <p>Fecha: <%= date.strftime("%Y-%m-%d") %></p>
+      <p>Emoción: <%= answer_6 ? answer_6.text : 'Not found' %></p>
+      <p>Tipo de comida: <%= answer_1 ? answer_1.text : 'Not found' %></p>
+    <% end %>
   <% end %>
 <% end %>
+
+<h4>Sin alimentarse</h4>
+<% if @no_dates_alimentacion.empty? %>
+  <p>No dates found</p>
+<% else %>
+  <% @no_dates_alimentacion.each do |date| %>
+    <% if date %>
+      <% report = Report.find_by(date: date, patient_id: @patient.id) %>
+      <% answer_1 = Answer.find_by(report_id: report.id, question_id: 1) %>
+      <% answer_3 = Answer.find_by(report_id: report.id, question_id: 3) %>
+      <% answer_6 = Answer.find_by(report_id: report.id, question_id: 6) %>
+      <p>Fecha: <%= date.strftime("%Y-%m-%d") %></p>
+      <p>Emoción: <%= answer_6 ? answer_6.text : 'Not found' %></p>
+      <p>Tipo de comida: <%= answer_1 ? answer_1.text : 'Not found' %></p>
+      <p>Porque: <%= answer_3 ? answer_3.text : 'Not found' %></p>
+    <% end %>
+  <% end %>
+<% end %>
+
+<h4>Sin seguir las recomendaciones</h4>
+<% if @no_dates_recomendacion.empty? %>
+  <p>No dates found</p>
+<% else %>
+  <% @no_dates_recomendacion.each do |date| %>
+    <% if date %>
+      <% report = Report.find_by(date: date, patient_id: @patient.id) %>
+      <% answer_1 = Answer.find_by(report_id: report.id, question_id: 1) %>
+      <% answer_5 = Answer.find_by(report_id: report.id, question_id: 5) %>
+      <% answer_6 = Answer.find_by(report_id: report.id, question_id: 6) %>
+      <p>Fecha: <%= date.strftime("%Y-%m-%d") %></p>
+      <p>Emoción: <%= answer_6 ? answer_6.text : 'Not found' %></p>
+      <p>Tipo de comida: <%= answer_1 ? answer_1.text : 'Not found' %></p>
+      <p>Porque: <%= answer_5 ? answer_5.text : 'Not found' %></p>
+    <% end %>
+  <% end %>
+<% end %>
+
+<h3>Green flags</h3>
+<h4>Emocion al 5 </h4>
+<% if @emociones_positivas.empty? %>
+  <p>No dates found</p>
+<% else %>
+  <% @emociones_positivas.each do |date| %>
+    <% if date %>
+      <% report = Report.find_by(date: date, patient_id: @patient.id) %>
+      <% answer_1 = Answer.find_by(report_id: report.id, question_id: 1) %>
+      <% answer_8 = Answer.find_by(report_id: report.id, question_id: 8) %>
+      <% answer_9 = Answer.find_by(report_id: report.id, question_id: 9) %>
+      <p>Fecha: <%= date.strftime("%Y-%m-%d") %></p>
+      <p>Tipo de comida: <%= answer_1 ? answer_1.text : 'Not found' %></p>
+      <p>Hambre: <%= answer_8 ? answer_8.text : 'Not found' %></p>
+      <p>Saciedad: <%= answer_9 ? answer_9.text : 'Not found' %></p>
+    <% end %>
+  <% end %>
+<% end %>
+
+  <% #answers  %>
+    <h3>Answers</h3>
+    <% @answers.group_by(&:report_id).each do |report_id, answers| %>
+      <h4>Report <%= report_id %></h4>
+        <% if answers.first && answers.first.report && answers.first.report.date %>
+          <p>Report Date: <%= answers.first.report.date.to_date.to_s %></p>
+        <% end %>
+      <ul>
+        <% answers.each do |answer| %>
+          <li><strong><%= answer.question.title %>:</strong> <%= answer.text %></li>
+        <% end %>
+      </ul>
+    <% end %>
