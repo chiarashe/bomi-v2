@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   # before_action :authenticate_doctor!
   before_action :configure_permitted_parameters, if: :devise_controller?
+
   include Pundit::Authorization
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
