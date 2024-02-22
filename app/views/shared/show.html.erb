@@ -1,20 +1,141 @@
 <div>
-  <h3>This is the shared view between patient and doctor</h3>
-  <% if patient_signed_in? %>
-    <h4>You are viewing this page as a patient</h4>
-  <% elsif doctor_signed_in? %>
-    <h4>You are viewing this page as a doctor</h4>
-  <% else %>
-    <h4>There is no user logged in</h4>
+  <% #filter %>
+  <h1>This is the shared view between patient and doctor</h1>
+    <%= form_tag('', method: :get) do %>
+      <label for="start_date">Start date:</label>
+      <%= date_field_tag 'start_date', params[:start_date] %>
+      <label for="end_date">End date:</label>
+      <%= date_field_tag 'end_date', params[:end_date] %>
+      <%= submit_tag 'Filter' %>
+    <% end %>
+
+  <h3><%= @patient.first_name %></h3>
+
+    <h3>Grafícas</h3>
+    <% # pudiste alimentarte graficas %>
+    <div class="d-flex justify-content-center">
+      <div class="col-3 p-2">
+        <h4>Pudiste alimentarte?</h4>
+        <%= pie_chart({"No" => @no_count_2, "Sí" => @si_count_2}, width: "200px", height: "200px") %>
+      </div>
+
+      <div class="col-3 p-2">
+        <h4>Alimentarte? vs tipo de comida</h4>
+        <%= column_chart @data, xtitle: "Tipo de Comida", ytitle: "Yes/No", width: "350px", height: "250px" %>
+      </div>
+    <% # tuviste un atracón graficas %>
+      <div class="col-3 p-2">
+        <h4>Atracones?</h4>
+        <%= pie_chart({"No" => @no_count_10, "Sí" => @si_count_10}, width: "200px", height: "200px") %>
+      </div>
+
+      <div class="col-3 p-2">
+        <h4>Atracones vs tipo de comida?</h4>
+        <%= column_chart @data_10, xtitle: "Tipo de Comida", ytitle: "Yes/No", width: "350px", height: "250px" %>
+      </div>
+    </div>
+
+    <% # Hambre saciedad emociones graficas %>
+    <div class="d-flex justify-content-center">
+      <div class="col-4 p-5">
+        <%= scatter_chart @answers_8.zip(@answers_9), xtitle: "Hambre", ytitle: "Saciedad" %>
+      </div>
+      <div class="col-4 p-5">
+        <%= column_chart @data_8, xtitle: "Emoción", ytitle: "Hambre", width: "350px", height: "250px" %>
+      </div>
+    </div>
+
+    <% # Grafica completado diario %>
+    <div class="d-flex justify-content-center">
+      <div class="col-6 p-5">
+        <%= line_chart Report.group_by_day(:created_at).count %>
+      </div>
+    </div>
+
+
+<h3>Red flags</h3>
+<h4>Atracones</h4>
+<% if @yes_dates_atracon.empty? %>
+  <p>No dates found</p>
+<% else %>
+  <% @yes_dates_atracon.each do |date| %>
+    <% if date %>
+      <% report = Report.find_by(date: date, patient_id: @patient.id) %>
+      <% answer_1 = Answer.find_by(report_id: report.id, question_id: 1) %>
+      <% answer_6 = Answer.find_by(report_id: report.id, question_id: 6) %>
+      <p>Fecha: <%= date.strftime("%Y-%m-%d") %></p>
+      <p>Emoción: <%= answer_6 ? answer_6.text : 'Not found' %></p>
+      <p>Tipo de comida: <%= answer_1 ? answer_1.text : 'Not found' %></p>
+    <% end %>
   <% end %>
-  <h1><%= @patient.first_name %></h1>
+<% end %>
+
+<h4>Sin alimentarse</h4>
+<% if @no_dates_alimentacion.empty? %>
+  <p>No dates found</p>
+<% else %>
+  <% @no_dates_alimentacion.each do |date| %>
+    <% if date %>
+      <% report = Report.find_by(date: date, patient_id: @patient.id) %>
+      <% answer_1 = Answer.find_by(report_id: report.id, question_id: 1) %>
+      <% answer_3 = Answer.find_by(report_id: report.id, question_id: 3) %>
+      <% answer_6 = Answer.find_by(report_id: report.id, question_id: 6) %>
+      <p>Fecha: <%= date.strftime("%Y-%m-%d") %></p>
+      <p>Emoción: <%= answer_6 ? answer_6.text : 'Not found' %></p>
+      <p>Tipo de comida: <%= answer_1 ? answer_1.text : 'Not found' %></p>
+      <p>Porque: <%= answer_3 ? answer_3.text : 'Not found' %></p>
+    <% end %>
+  <% end %>
+<% end %>
+
+<h4>Sin seguir las recomendaciones</h4>
+<% if @no_dates_recomendacion.empty? %>
+  <p>No dates found</p>
+<% else %>
+  <% @no_dates_recomendacion.each do |date| %>
+    <% if date %>
+      <% report = Report.find_by(date: date, patient_id: @patient.id) %>
+      <% answer_1 = Answer.find_by(report_id: report.id, question_id: 1) %>
+      <% answer_5 = Answer.find_by(report_id: report.id, question_id: 5) %>
+      <% answer_6 = Answer.find_by(report_id: report.id, question_id: 6) %>
+      <p>Fecha: <%= date.strftime("%Y-%m-%d") %></p>
+      <p>Emoción: <%= answer_6 ? answer_6.text : 'Not found' %></p>
+      <p>Tipo de comida: <%= answer_1 ? answer_1.text : 'Not found' %></p>
+      <p>Porque: <%= answer_5 ? answer_5.text : 'Not found' %></p>
+    <% end %>
+  <% end %>
+<% end %>
+
+<h3>Green flags</h3>
+<h4>Emocion al 5 </h4>
+<% if @emociones_positivas.empty? %>
+  <p>No dates found</p>
+<% else %>
+  <% @emociones_positivas.each do |date| %>
+    <% if date %>
+      <% report = Report.find_by(date: date, patient_id: @patient.id) %>
+      <% answer_1 = Answer.find_by(report_id: report.id, question_id: 1) %>
+      <% answer_8 = Answer.find_by(report_id: report.id, question_id: 8) %>
+      <% answer_9 = Answer.find_by(report_id: report.id, question_id: 9) %>
+      <p>Fecha: <%= date.strftime("%Y-%m-%d") %></p>
+      <p>Tipo de comida: <%= answer_1 ? answer_1.text : 'Not found' %></p>
+      <p>Hambre: <%= answer_8 ? answer_8.text : 'Not found' %></p>
+      <p>Saciedad: <%= answer_9 ? answer_9.text : 'Not found' %></p>
+    <% end %>
+  <% end %>
+<% end %>
+
+  <% #answers  %>
     <h3>Answers</h3>
-    <ul>
-      <% @answers.each do |answer| %>
-        <li><%= answer.text %></li>
-      <% end %>
-    </ul>
-    <%= pie_chart({"No" => @no_count, "Sí" => @si_count}) %>
-    <%= pie_chart({"Desayuno" => @desayuno_count, "Almuerzo" => @almuerzo_count, "Comida" => @comida_count, "Cena" => @cena_count}) %>
-    <%= scatter_chart @answers_8.zip(@answers_9), xtitle: "Hambre", ytitle: "Saciedad" %>
-</div>
+    <% @answers.group_by(&:report_id).each do |report_id, answers| %>
+      <h4>Report <%= report_id %></h4>
+        <% if answers.first && answers.first.report && answers.first.report.date %>
+          <p>Report Date: <%= answers.first.report.date.to_date.to_s %></p>
+        <% end %>
+      <ul>
+        <% answers.each do |answer| %>
+          <li><strong><%= answer.question.title %>:</strong> <%= answer.text %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
