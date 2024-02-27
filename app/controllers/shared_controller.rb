@@ -3,10 +3,11 @@ class SharedController < ApplicationController
   before_action :authenticate_user!
 
   def show
+    @report = Report.find(params[:id])
     Rails.logger.debug "Current user: #{current_user}"
     Rails.logger.debug "Doctor signed in: #{doctor_signed_in?}"
     Rails.logger.debug "Patient signed in: #{patient_signed_in?}"
-    
+
     if patient_signed_in?
       unless current_patient == @patient
         redirect_to dashboard_patient_path, alert: 'You are not authorized to view this page'

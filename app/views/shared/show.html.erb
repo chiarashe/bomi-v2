@@ -10,6 +10,9 @@
     <% end %>
 
   <h3><%= @patient.first_name %></h3>
+  <% if current_user.is_a?(Doctor) %>
+    <%= link_to "Create a recommendation to your patient", new_doctor_report_recommendation_path(doctor_id: current_doctor.id, report_id: @report.id, patient_id: @patient.id) %>
+  <% end %>
 
     <h3>Grafícas</h3>
     <% # pudiste alimentarte graficas %>
@@ -138,4 +141,3 @@
         <% end %>
       </ul>
     <% end %>
-
