@@ -8,4 +8,5 @@ class Patient < ApplicationRecord
   has_many :doctors, through: :relations
   has_many :reports
   has_many :answers, through: :reports
+  has_many :recommendations
 end

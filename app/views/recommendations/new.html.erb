@@ -1,10 +1,19 @@
 <div class="container">
+
   <h2>Agregar una recomendación </h2>
- <%= simple_form_for @recommendation do |f| %>
+  <% if Doctor.exists?(current_doctor.id) %>
+  <p>Current user is a doctor</p>
+  <h1><%= current_doctor.first_name %></h1>
+  <h1><%= current_doctor.profession %></h1>
+  <% end %>
+  <h1><%= @patient.id %></h1>
+ <%= simple_form_for [@doctor, @report, @recommendation] do |f| %>
     <%= f.input :title, label:"Titulo" %>
     <%= f.input :comments, label:"Commentario" %>
     <%= f.input :link_content, label:"Liga de contenido" %>
     <%= f.input :attachment, as: :file %>
+    <%= f.input :report_id, as: :hidden, input_html: { value: @report.id } %>
+    <%= f.input :patient_id, as: :hidden, input_html: { value: @patient.id } %>
     <%= f.button :submit %>
   <% end %>
   <%= link_to "Regresar", dashboard_doctor_path, class: "button" %>
