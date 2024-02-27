@@ -24,7 +24,7 @@ Rails.application.routes.draw do
       resources :questions
     end
   end
-
+  resources :recommendations, only: [:destroy, :edit, :update]
   resources :relations, only: [:index, :show, :new, :create, :edit, :update, :destroy]
   resources :contents, only: [:index, :show, :new, :create, :edit, :update, :destroy]
 end

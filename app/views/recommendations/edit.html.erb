@@ -1,0 +1,13 @@
+<div class="container">
+  <h2>Edit Recommendation</h2>
+  <%= simple_form_for [@doctor, @report, @recommendation] do |f| %>
+    <%= f.input :title, label:"Titulo" %>
+    <%= f.input :comments, label:"Commentario" %>
+    <%= f.input :link_content, label:"Liga de contenido" %>
+    <%= f.input :attachment, as: :file %>
+    <%= f.input :report_id, as: :hidden, input_html: { value: @report.id } %>
+    <%= f.input :patient_id, as: :hidden, input_html: { value: @patient.id } %>
+    <%= f.button :submit %>
+  <% end %>
+  <%= link_to "Regresar", dashboard_doctor_path, class: "button" %>
+</div>

@@ -8,21 +8,19 @@ class RecommendationsController < ApplicationController
   def new
     @doctor = current_doctor
     @report = Report.find(params[:report_id])
-    @patient = Patient.find(params[:patient_id])
+    @patient = @report.patient
     @recommendation = Recommendation.new
   end
 
   def create
-    Rails.logger.debug("Recommendation params: #{recommendation_params}")
-    Rails.logger.debug("PATIEND ID IS HERE: #{params[:patient_id]}")
     @doctor = current_doctor
     @report = Report.find(params[:report_id])
-    @patient = Patient.find(params[:patient_id])
+    @patient = @report.patient
     @recommendation = @report.recommendations.build(recommendation_params)
     @recommendation.doctor = current_doctor
     @recommendation.patient = @patient
     if @recommendation.save
-      redirect_to shared_path(@report)
+      redirect_to shared_path(@report), notice: 'Recommendation was successfully created.'
     else
       render :new
     end
@@ -32,20 +30,26 @@ class RecommendationsController < ApplicationController
     @recommendation = Recommendation.find(params[:id])
   end
 
-  def update
-    @recommendation = Recommendation.find(params[:id])
-    @recommendation.update(recommendation_params)
-    redirect_to recommendation_path(@recommendation)
-  end
-
   def edit
     @recommendation = Recommendation.find(params[:id])
+    @report = @recommendation.report
+    @doctor = current_doctor
+    @patient = @report.patient
   end
+
+  def update
+    @recommendation = Recommendation.find(params[:id])
+    @report = @recommendation.report
+    @recommendation.update(recommendation_params)
+    redirect_to shared_path(@report), notice: 'Recommendation was successfully updated.'
+  end
+
 
   def destroy
     @recommendation = Recommendation.find(params[:id])
+    @report = @recommendation.report
     @recommendation.destroy
-    redirect_to dashboard_doctor_path, notice: 'Recommendation was successfully deleted.'
+    redirect_to shared_path(@report), notice: 'Recommendation was successfully deleted.'
   end
 
   private

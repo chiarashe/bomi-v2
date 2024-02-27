@@ -4,14 +4,49 @@
     <%= form_tag('', method: :get) do %>
       <label for="start_date">Start date:</label>
       <%= date_field_tag 'start_date', params[:start_date] %>
-      <label for="end_date">End date:</label>
+    <label for="end_date">End date:</label>
       <%= date_field_tag 'end_date', params[:end_date] %>
       <%= submit_tag 'Filter' %>
     <% end %>
 
-  <h3><%= @patient.first_name %></h3>
+  <h3>Patient: <%= @patient.first_name %></h3>
   <% if current_user.is_a?(Doctor) %>
-    <%= link_to "Create a recommendation to your patient", new_doctor_report_recommendation_path(doctor_id: current_doctor.id, report_id: @report.id, patient_id: @patient.id) %>
+    <%= link_to "Create a recommendation to your patient", new_doctor_report_recommendation_path(current_doctor, @report) %>
+  <% end %>
+
+  <% if current_user.is_a?(Patient) %>
+    <div class="py-5">
+      <h2>Doctor's recommendations:</h2>
+      <% @patient.doctors.each do |doctor| %>
+        <h3>Doctor: <%= doctor.first_name %></h3> <!-- replace with your doctor's name attribute -->
+        <% doctor.recommendations.where(patient: @patient).each do |recommendation| %>
+          <h4>Title: <%= recommendation.title %></h4>
+          <p>Comment: <%= recommendation.comments %></p>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if current_user.is_a?(Doctor) %>
+    <div class="py-3 border-3 border-danger w-50">
+      <h3>My recommendations:</h3>
+      <% current_doctor.recommendations.each do |recommendation| %>
+        <h4>Title: <%= recommendation.title %></h4>
+        <p>Comment: <%= recommendation.comments %></p>
+        <%= link_to "Delete this recommendation", recommendation_path(@recommendation), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }  %>
+        <%= link_to "Edit this recommendation", edit_recommendation_path(@recommendation) %>
+      <% end %>
+    </div>
+    <div class="pb-3">
+      <h3>Other doctor's recommendations:</h3>
+      <% @patient.doctors.where.not(id: current_doctor.id).each do |doctor| %>
+        <h3>Doctor: <%= doctor.first_name %></h3>
+        <% doctor.recommendations.where(patient: @patient).each do |recommendation| %>
+          <h4>Title: <%= recommendation.title %></h4>
+          <p>Comment: <%= recommendation.comments %></p>
+        <% end %>
+      <% end %>
+    </div>
   <% end %>
 
     <h3>Grafícas</h3>

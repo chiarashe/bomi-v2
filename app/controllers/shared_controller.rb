@@ -4,6 +4,9 @@ class SharedController < ApplicationController
 
   def show
     @report = Report.find(params[:id])
+    @doctors = @patient.doctors
+    @recommendations = Recommendation.where(doctor: @doctors, patient: @patient)
+    @recommendation = Recommendation.find_by(report: @report)
     Rails.logger.debug "Current user: #{current_user}"
     Rails.logger.debug "Doctor signed in: #{doctor_signed_in?}"
     Rails.logger.debug "Patient signed in: #{patient_signed_in?}"
