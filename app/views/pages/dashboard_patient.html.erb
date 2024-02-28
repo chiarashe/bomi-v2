@@ -9,6 +9,17 @@
       <%= link_to "Cambiar información", edit_patient_registration_path, class: "button" %>
   </div>
 
+  <div class="p-3 border w-25">
+    <h3>My doctors: </h3>
+    <% if @patient.doctors.any? %>
+      <% @patient.doctors.each do |doctor| %>
+        <p><%= doctor.first_name %> <%= doctor.last_name %></p>
+        <% relation = @patient.relations.find_by(doctor: doctor) %>
+        <%= link_to "Delete this doctor", relation_path(relation), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+      <% end %>
+    <% end %>
+  </div>
+
   <div class="all-content">
     <%= link_to "Ver recursos", contents_path, class: "button" %>
   </div>
@@ -24,7 +35,7 @@
 <% end %>
 
 <h3>Your QR Code</h3>
-<%= link_to "Go to shared page (temporary button)", shared_path(@patient) %>
+<%= link_to "Go to shared page (temporary button)", shared_path(id: @patient.id, token: @patient.token) %>
 <div>
   <%= raw @svg %>
 </div>

@@ -44,7 +44,6 @@ class RecommendationsController < ApplicationController
     redirect_to shared_path(@report), notice: 'Recommendation was successfully updated.'
   end
 
-
   def destroy
     @recommendation = Recommendation.find(params[:id])
     @report = @recommendation.report
