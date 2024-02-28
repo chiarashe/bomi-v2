@@ -3,13 +3,11 @@ class SharedController < ApplicationController
   before_action :authenticate_user!
 
   def show
+    @shared_url = generate_shared_url(@patient)
     @report = Report.find(params[:id])
     @doctors = @patient.doctors
     @recommendations = Recommendation.where(doctor: @doctors, patient: @patient)
     @recommendation = Recommendation.find_by(report: @report)
-    Rails.logger.debug "Current user: #{current_user}"
-    Rails.logger.debug "Doctor signed in: #{doctor_signed_in?}"
-    Rails.logger.debug "Patient signed in: #{patient_signed_in?}"
 
     if patient_signed_in?
       unless current_patient == @patient
@@ -19,12 +17,6 @@ class SharedController < ApplicationController
     elsif doctor_signed_in?
       @doctor = current_doctor
       relation = Relation.find_or_create_by(doctor: @doctor, patient: @patient)
-      if relation.persisted?
-        Rails.logger.debug "Relation already exists or was created between doctor #{@doctor.id} and patient #{@patient.id}"
-      else
-        Rails.logger.debug "Failed to create relation between doctor #{@doctor.id} and patient #{@patient.id}"
-        Rails.logger.debug "Validation errors: #{relation.errors.full_messages}"
-      end
     end
 
     @reports = @patient.reports.includes(:answers).order(created_at: :desc).limit(5)
@@ -78,10 +70,6 @@ class SharedController < ApplicationController
 
   private
 
-  def set_patient
-    @patient = Patient.find(params[:id])
-  end
-
   def authenticate_user!
     if doctor_signed_in?
       authenticate_doctor!
@@ -90,5 +78,18 @@ class SharedController < ApplicationController
     else
       redirect_to new_user_session_path, alert: 'You need to sign in or sign up before continuing'
     end
+  end
+
+  def generate_shared_url(patient)
+    if patient.token
+    Rails.application.routes.url_helpers.shared_url(id: patient.id, token: patient.token, host: 'localhost', port: 3000)
+    else
+      raise "Patient #{patient.id} does not have a token. Please run `rails db:migrate` to add the token column to the patients table."
+    end
+  end
+
+
+  def set_patient
+    @patient = Patient.find(params[:id])
   end
 end

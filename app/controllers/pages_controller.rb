@@ -16,6 +16,7 @@ class PagesController < ApplicationController
 
   def dashboard_patient
     @patient = current_patient
+    @relation = @patient.relations.find_by(doctor_id: params[:doctor_id])
     unless current_patient == @patient
       redirect_to root_path, alert: 'Acces denied'
       return
@@ -23,7 +24,7 @@ class PagesController < ApplicationController
     @reports = @patient.reports
     @report = @patient.reports.order(created_at: :desc).first
     @answers = @report.answers if @report
-    qr = RQRCode::QRCode.new(shared_url(@patient), size: 4, level: :h)
+    qr = RQRCode::QRCode.new(shared_url(id: @patient.id, token: @patient.token), size: 6, level: :h)
     @svg = qr.as_svg(offset: 0, color: '000', shape_rendering: 'crispEdges', module_size: 6)
   end
 end
