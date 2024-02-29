@@ -16,6 +16,7 @@ class PagesController < ApplicationController
 
   def dashboard_patient
     @patient = current_patient
+    @medicine = Medicine.new
     @relation = @patient.relations.find_by(doctor_id: params[:doctor_id])
     unless current_patient == @patient
       redirect_to root_path, alert: 'Acces denied'
