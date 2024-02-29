@@ -27,4 +27,5 @@ Rails.application.routes.draw do
   resources :recommendations, only: [:destroy, :edit, :update]
   resources :relations, only: [:destroy, :create]
   resources :contents, only: [:index, :show, :new, :create, :edit, :update, :destroy]
+  resources :medicines, only: [:create, :update, :destroy]
 end
