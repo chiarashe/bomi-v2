@@ -150,7 +150,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_28_231046) do
     t.bigint "doctor_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "token"
     t.index ["doctor_id"], name: "index_relations_on_doctor_id"
     t.index ["patient_id"], name: "index_relations_on_patient_id"
   end
