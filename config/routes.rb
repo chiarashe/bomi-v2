@@ -25,7 +25,11 @@ Rails.application.routes.draw do
     end
   end
   resources :recommendations, only: [:destroy, :edit, :update]
-  resources :relations, only: [:destroy, :create]
+  resources :relations, only: [:destroy, :create] do
+    member do
+      patch 'update_status', to: 'relations#update_status', as: 'update_status'
+    end
+  end
   resources :contents, only: [:index, :show, :new, :create, :edit, :update, :destroy]
   resources :medicines, only: [:create, :update, :destroy]
 end
