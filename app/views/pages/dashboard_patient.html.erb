@@ -15,6 +15,11 @@
       <% @patient.doctors.each do |doctor| %>
         <p><%= doctor.first_name %> <%= doctor.last_name %></p>
         <% relation = @patient.relations.find_by(doctor: doctor) %>
+        <p>Status: <%= relation.status.capitalize %></p>
+        <% if relation.status == 'pending' %>
+          <%= link_to "Confirm", update_status_relation_path(relation, status: 'confirmed'), data: { turbo_method: :patch } %>
+          <%= link_to "Deny", update_status_relation_path(relation, status: 'denied'), data: { turbo_method: :patch } %>
+        <% end %>
         <%= link_to "Delete this doctor", relation_path(relation), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
       <% end %>
     <% end %>

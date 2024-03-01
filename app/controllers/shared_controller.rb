@@ -17,6 +17,10 @@ class SharedController < ApplicationController
     elsif doctor_signed_in?
       @doctor = current_doctor
       relation = Relation.find_or_create_by(doctor: @doctor, patient: @patient)
+      unless relation.confirmed?
+        redirect_to dashboard_doctor_path, alert: 'You are not authorized to view this page'
+        return
+      end
     end
 
     @reports = @patient.reports.includes(:answers).order(created_at: :desc).limit(5)
