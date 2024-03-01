@@ -1,6 +1,53 @@
-<div>
-  <% #filter %>
-  <h1>This is the shared view between patient and doctor</h1>
+<div class="container p-4">
+  <h1>Report</h1>
+<div class="col-9 d-flex flex-wrap">
+  <div class="col-6">
+
+      <% #filter %>
+      <h3>Patient: <%= @patient.first_name %> <%= @patient.last_name %></h3>
+        <p>Fecha de nacimiento: <%= @patient.date_birth %></p>
+        <p>Número de telefono: <%= @patient.phone_number %></p>
+        <p>Correo: <%= @patient.email %></p>
+        <p>Location: <%= @patient.location %></p>
+
+      <% if current_user.is_a?(Doctor) %>
+        <%= link_to "Create a recommendation to your patient", new_doctor_report_recommendation_path(current_doctor, @report) %>
+      <% end %>
+
+      <% if current_user.is_a?(Doctor) %>
+        <h3>My recommendations:</h3>
+          <% if @recommendation.present? %>
+            <%= link_to "Delete this recommendation", recommendation_path(@recommendation), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }  %>
+            <%= link_to "Edit this recommendation", edit_recommendation_path(@recommendation) %>
+          <% else %>
+            <p>No recommendations yet.</p>
+      <% end %>
+
+      <div class="pb-3">
+        <h3>Other doctor's recommendations:</h3>
+        <% @patient.doctors.where.not(id: current_doctor.id).each do |doctor| %>
+          <h3>Doctor: <%= doctor.first_name %></h3>
+          <% doctor.recommendations.where(patient: @patient).each do |recommendation| %>
+            <h4>Title: <%= recommendation.title %></h4>
+            <p>Comment: <%= recommendation.comments %></p>
+          <% end %>
+        <% end %>
+      </div>
+
+        <h3><%= @patient.first_name %> está tomando estas medicinas: </h3>
+        <% @patient.medicines.each do |medicine| %>
+          <p>Nombre: <%= medicine.name %></p>
+          <p>Dosis: <%= medicine.dosage %></p>
+          <p>Frecuencia: <%= medicine.times_a_day %></p>
+          <p>Por cuanto tiempo: <%= medicine.duration %></p>
+          <p>Fecha de inicio: <%= medicine.start_date %></p>
+          <p>Fecha de conclusión: <%= medicine.end_date %></p>
+          <p>Recomendado por: <%= medicine.recommended_by %></p>
+        <% end %>
+
+    </div>
+
+  <div class="col-6">
     <%= form_tag('', method: :get) do %>
       <label for="start_date">Start date:</label>
       <%= date_field_tag 'start_date', params[:start_date] %>
@@ -8,11 +55,11 @@
       <%= date_field_tag 'end_date', params[:end_date] %>
       <%= submit_tag 'Filter' %>
     <% end %>
+  </div>
+</div>
 
-  <h3>Patient: <%= @patient.first_name %></h3>
-  <% if current_user.is_a?(Doctor) %>
-    <%= link_to "Create a recommendation to your patient", new_doctor_report_recommendation_path(current_doctor, @report) %>
-  <% end %>
+
+
 
   <% if current_user.is_a?(Patient) %>
   <h1>Your shared URL</h1>
@@ -29,39 +76,9 @@
     </div>
   <% end %>
 
-  <% if current_user.is_a?(Doctor) %>
-    <div class="row">
-      <div class="col-6 py-3 border-3 border-danger w-50">
-        <h3>My recommendations:</h3>
-        <% current_doctor.recommendations.each do |recommendation| %>
-          <h4>Title: <%= recommendation.title %></h4>
-          <p>Comment: <%= recommendation.comments %></p>
-          <%= link_to "Delete this recommendation", recommendation_path(@recommendation), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }  %>
-          <%= link_to "Edit this recommendation", edit_recommendation_path(@recommendation) %>
-        <% end %>
-      </div>
-      <div class="col-6 py-3 border-3 border-danger-w-50">
-        <h3><%= @patient.first_name %> está tomando estas medicinas: </h3>
-        <% @patient.medicines.each do |medicine| %>
-          <p>Nombre: <%= medicine.name %></p>
-          <p>Dosis: <%= medicine.dosage %></p>
-          <p>Frecuencia: <%= medicine.times_a_day %></p>
-          <p>Por cuanto tiempo: <%= medicine.duration %></p>
-          <p>Fecha de inicio: <%= medicine.start_date %></p>
-          <p>Fecha de conclusión: <%= medicine.end_date %></p>
-          <p>Recomendado por: <%= medicine.recommended_by %></p>
-        <% end %>
-      </div>
-      <div class="pb-3">
-        <h3>Other doctor's recommendations:</h3>
-        <% @patient.doctors.where.not(id: current_doctor.id).each do |doctor| %>
-          <h3>Doctor: <%= doctor.first_name %></h3>
-          <% doctor.recommendations.where(patient: @patient).each do |recommendation| %>
-            <h4>Title: <%= recommendation.title %></h4>
-            <p>Comment: <%= recommendation.comments %></p>
-          <% end %>
-        <% end %>
-      </div>
+
+
+
     </div>
   <% end %>
 
@@ -192,3 +209,4 @@
         <% end %>
       </ul>
     <% end %>
+</div>
