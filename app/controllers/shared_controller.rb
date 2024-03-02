@@ -25,6 +25,7 @@ class SharedController < ApplicationController
 
     @reports = @patient.reports.includes(:answers).order(created_at: :desc).limit(5)
     @answers = @reports.map(&:answers).flatten
+    @reports_all = Report.where(patient_id: current_user.id)
 
 #filter
     start_date = params[:start_date].present? ? Date.parse(params[:start_date]) : nil
@@ -64,6 +65,8 @@ class SharedController < ApplicationController
     @emotion_type = @answers.where(patient_id: @patient.id, question_id: 6).pluck(:text)
     @hunger_type = @answers.where(patient_id: @patient.id, question_id: 8).pluck(:text)
     @data_8 = @hunger_type.zip(@emotion_type).group_by(&:itself).transform_values(&:count)
+
+
 
   #red flags/green flags
     @yes_dates_atracon = Answer.joins(:report).where(patient_id: @patient.id, question_id: 10, text: "Sí").pluck('reports.date')
