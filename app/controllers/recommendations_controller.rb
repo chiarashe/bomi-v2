@@ -20,7 +20,7 @@ class RecommendationsController < ApplicationController
     @recommendation.doctor = current_doctor
     @recommendation.patient = @patient
     if @recommendation.save
-      redirect_to shared_path(@report), notice: 'Recommendation was successfully created.'
+      redirect_to shared_path(id: @patient.id, token: @patient.token), notice: 'Recommendation was successfully created.'
     else
       render :new
     end
@@ -41,14 +41,16 @@ class RecommendationsController < ApplicationController
     @recommendation = Recommendation.find(params[:id])
     @report = @recommendation.report
     @recommendation.update(recommendation_params)
-    redirect_to shared_path(@report), notice: 'Recommendation was successfully updated.'
+    @patient = @report.patient
+    redirect_to shared_path(id: @patient.id, token: @patient.token), notice: 'Recommendation was successfully updated.'
   end
 
   def destroy
     @recommendation = Recommendation.find(params[:id])
     @report = @recommendation.report
     @recommendation.destroy
-    redirect_to shared_path(@report), notice: 'Recommendation was successfully deleted.'
+    @patient = @report.patient
+    redirect_to shared_path(id: @patient.id, token: @patient.token), notice: 'Recommendation was successfully deleted.'
   end
 
   private
