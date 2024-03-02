@@ -12,17 +12,21 @@
   </div>
 
   <h3>Mis pacientes</h3>
-  <ul>
-    <% @doctor.patients.each do |patient| %>
-      <li>
-        <%= link_to patient.first_name, shared_path(id: patient.id, token: patient.token) %>
-        <% relation = @doctor.relations.find_by(patient: patient) %>
-        <% if relation %>
-          - Status: <%= relation.status.capitalize %>
-        <% end %>
-      </li>
-    <% end %>
-  </ul>
+  <% if @doctor.patients.any? %>
+    <ul>
+      <% @doctor.patients.each do |patient| %>
+        <li>
+          <%= link_to patient.first_name, shared_path(id: patient.id, token: patient.token) %>
+          <% relation = @doctor.relations.find_by(patient: patient) %>
+          <% if relation %>
+            - Status: <%= relation.status.capitalize %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>No tienes pacientes aún.</p>
+  <% end %>
 
   <div class="contents">
     <h3>Mis contenidos</h3>
