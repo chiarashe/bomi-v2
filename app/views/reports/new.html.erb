@@ -46,6 +46,7 @@
         <% elsif answer_fields.object.question_id == 10 %>
           <%= answer_fields.select :text, ["Sí", "No"], {}, data: { class: "form-control"} %>
         <% else %>
+          <%= answer_fields.hidden_field :question_id, value: 11 %>
           <%= answer_fields.text_field :text %>
         <% end %>
       <% end %>
