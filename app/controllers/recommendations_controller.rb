@@ -16,12 +16,14 @@ class RecommendationsController < ApplicationController
     @doctor = current_doctor
     @report = Report.find(params[:report_id])
     @patient = @report.patient
+    puts @patient.inspect
     @recommendation = @report.recommendations.build(recommendation_params)
     @recommendation.doctor = current_doctor
     @recommendation.patient = @patient
     if @recommendation.save
       redirect_to shared_path(id: @patient.id, token: @patient.token), notice: 'Recommendation was successfully created.'
     else
+      flash.now[:error] = @recommendation.errors.full_messages.to_sentence
       render :new
     end
   end
