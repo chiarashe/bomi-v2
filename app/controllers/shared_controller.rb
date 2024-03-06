@@ -6,7 +6,7 @@ class SharedController < ApplicationController
     @shared_url = generate_shared_url(@patient)
     @report = Report.find(params[:id])
     @doctors = @patient.doctors
-    @recommendations = Recommendation.where(doctor: @doctors, patient: @patient)
+    @recommendations = Recommendation.where(doctor: current_doctor, patient: @patient, report: @report)
     @recommendation = Recommendation.find_by(report: @report)
 
     if patient_signed_in?
