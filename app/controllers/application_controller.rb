@@ -9,10 +9,18 @@ class ApplicationController < ActionController::Base
   private
 
   def user_not_authorized
-    redirect_to dashboard_patient_path, alert: "You are not authorized to perform this action."
+    if doctor_signed_in?
+      redirect_to dashboard_doctor_path, alert: "You are not authorized to perform this action."
+    elsif patient_signed_in?
+      redirect_to dashboard_patient_path, alert: "You are not authorized to perform this action."
+    else
+      redirect_to root_path, alert: "You are not authorized to perform this action."
+    end
   end
 
   def current_user
+    Rails.logger.debug "Current doctor: #{current_doctor.inspect}"
+    Rails.logger.debug "Current patient: #{current_patient.inspect}"
     @current_user ||= current_doctor || current_patient
   end
 

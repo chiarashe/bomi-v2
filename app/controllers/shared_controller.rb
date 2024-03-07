@@ -15,6 +15,7 @@ class SharedController < ApplicationController
         return
       end
     elsif doctor_signed_in?
+      Rails.logger.info "Is doctor signed in? #{doctor_signed_in?}"
       @doctor = current_doctor
       relation = Relation.find_or_create_by(doctor: @doctor, patient: @patient)
       unless relation.confirmed?
@@ -25,7 +26,7 @@ class SharedController < ApplicationController
 
     @reports = @patient.reports.includes(:answers).order(created_at: :desc).limit(5)
     @answers = @reports.map(&:answers).flatten
-    @reports_all = Report.where(patient_id: current_user.id)
+    @reports_all = Report.where(patient_id: @patient.id)
 
 #filter
     start_date = params[:start_date].present? ? Date.parse(params[:start_date]) : nil
@@ -78,12 +79,20 @@ class SharedController < ApplicationController
   private
 
   def authenticate_user!
-    if doctor_signed_in?
-      authenticate_doctor!
-    elsif patient_signed_in?
+    if patient_signed_in?
       authenticate_patient!
+    elsif doctor_signed_in?
+      authenticate_doctor!
     else
-      redirect_to new_user_session_path, alert: 'You need to sign in or sign up before continuing'
+      redirect_to dashboard_doctor_path, alert: 'You still not have access to this page'
+    end
+  end
+
+  def authenticate_doctor!
+    Rails.logger.debug "Doctor signed in? #{doctor_signed_in?}"
+    unless doctor_signed_in?
+      Rails.logger.info "Redirecting to new doctor session path"
+      redirect_to new_doctor_session_path, alert: 'You need to sign in or sign up before continuing'
     end
   end
 
@@ -95,8 +104,11 @@ class SharedController < ApplicationController
     end
   end
 
-
   def set_patient
     @patient = Patient.find(params[:id])
+  end
+
+  def set_doctor
+    @doctor = Doctor.find(params[:id])
   end
 end

@@ -7,6 +7,10 @@ class PagesController < ApplicationController
 
   def dashboard_doctor
     @doctor = current_doctor
+    Rails.logger.info "Authenticating doctor: #{current_doctor.email}"
+    Rails.logger.info "Authenticated doctor ID: #{current_doctor.id}"
+    Rails.logger.info "Is doctor signed in? #{doctor_signed_in?}"
+    Rails.logger.info "Session: #{session.to_hash}"
     unless current_doctor == @doctor
       redirect_to root_path, alert: 'Acces denied'
       return
