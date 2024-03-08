@@ -23,7 +23,6 @@ class RecommendationsController < ApplicationController
     if @recommendation.save
       redirect_to shared_path(id: @patient.id, token: @patient.token), notice: 'Recommendation was successfully created.'
     else
-      flash.now[:error] = @recommendation.errors.full_messages.to_sentence
       render :new
     end
   end
