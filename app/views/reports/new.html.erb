@@ -24,32 +24,48 @@
         <% elsif answer_fields.object.question_id == 1 %>
           <%= answer_fields.select :text, ["Desayuno", "Snack", "Comida", "Cena"], {}, { class: "form-control" } %>
         <% elsif answer_fields.object.question_id == 6 %>
-          <div style="display: flex; align-items: center;">
-            <%= answer_fields.label :text, "Muy mal", style: "margin-right: 10px;" %>
-            <%= answer_fields.range_field :text, in: 0..5, step: 1, class: "form-control-range", style: "width: 80%;" %>
-            <%= answer_fields.label :text, "Muy bien", style: "margin-left: 10px;" %>
-          </div>
-        <% elsif answer_fields.object.question_id == 7 %>
-          <%= answer_fields.select :text, ["Solo/a", "Pareja", "Familia", "Amigo/a(s)", "Compañero/a de trabajo/escuela", "Otro"], {}, data: { class: "form-control"} %>
-        <% elsif answer_fields.object.question_id == 8 %>
-          <div style="display: flex; align-items: center;">
-            <%= answer_fields.label :text, "Nada de hambre", style: "margin-right: 10px;" %>
-            <%= answer_fields.range_field :text, in: 0..5, step: 1, class: "form-control-range", style: "width: 80%;" %>
-            <%= answer_fields.label :text, "Mucha hambre", style: "margin-left: 10px;" %>
-          </div>
-        <% elsif answer_fields.object.question_id == 9 %>
-          <div style="display: flex; align-items: center;">
-            <%= answer_fields.label :text, "Nada lleno/a", style: "margin-right: 10px;" %>
-            <%= answer_fields.range_field :text, in: 0..10, step: 1, class: "form-control-range", style: "width: 80%;" %>
-            <%= answer_fields.label :text, "Muy lleno/a", style: "margin-left: 10px;"%>
-          </div>
-        <% elsif answer_fields.object.question_id == 10 %>
-          <%= answer_fields.select :text, ["Sí", "No"], {}, data: { class: "form-control"} %>
-        <% else %>
-          <%= answer_fields.hidden_field :question_id, value: 11 %>
-          <%= answer_fields.text_field :text %>
-        <% end %>
-      <% end %>
+          <% options = [
+            { emoji: '😃', text: 'Feliz' },
+            { emoji: '😊', text: 'Tranquilo/a' },
+            { emoji: '🤩', text: 'Con energía' },
+            { emoji: '🤔', text: 'Curioso/a' },
+            { emoji: '🧐', text: 'Inspirado/a' },
+            { emoji: '🙂', text: 'Capaz' },
+            { emoji: '😁', text: 'Satisfecho/a' },
+            { emoji: '😢', text: 'Triste' },
+            { emoji: '😴', text: 'Cansado/a' },
+            { emoji: '😕', text: 'Confundido/a' },
+            { emoji: '😠', text: 'Enojado/a' },
+            { emoji: '😣', text: 'Ansioso/a' },
+            { emoji: '😒', text: 'Crítico/a' },
+            { emoji: '😖', text: 'Irritado/a' },
+            { emoji: '😑', text: 'Aburrido/a' },
+            { emoji: '😥', text: 'Estresado/a' },
+            { emoji: '😐', text: 'Apático/a' },
+          ] %>
+
+          <% options.each_with_index do |option, i| %>
+            <div class="form-check form-check-inline">
+              <%= answer_fields.check_box :text, { multiple: true, id: "option_#{i}" }, option[:text], nil %>
+              <label class="form-check-label" for="option_<%= i %>">
+                <%= option[:emoji] %> <%= option[:text] %>
+              </label>
+            </div>
+          <% end %>
+
+          <% elsif answer_fields.object.question_id == 7 %>
+            <%= answer_fields.select :text, ["Solo/a", "Pareja", "Familia", "Amigo/a(s)", "Compañero/a(s) de trabajo/escuela", "Grupo", "Otro"], {}, class: "form-control" %>
+          <% elsif answer_fields.object.question_id == 8 %>
+              <%= answer_fields.select :text, options_for_select((1..10).map { |i| ["#{i} - #{['Hambre extrema 😫', 'Mucha hambre 😤', 'Hambre 😋', 'Poca hambre 🤔', 'Neutral 😐', 'Casi lleno/a 😌', 'lleno/a y Satisfecho/a 😬', 'Muy lleno/a 😨', 'Muy lleno/a e Incomodo/a 😓', 'Satrurado/a 🤢'][i-1]}", i] }), {}, class: "form-control" %>
+          <% elsif answer_fields.object.question_id == 9 %>
+            <%= answer_fields.select :text, options_for_select((1..10).map { |i| ["#{i} - #{['Hambre extrema 😫', 'Mucha hambre 😤', 'Hambre 😋', 'Poca hambre 🤔', 'Neutral 😐', 'Casi lleno/a 😌', 'lleno/a y Satisfecho/a 😬', 'Muy lleno/a 😨', 'Muy lleno/a e Incomodo/a 😓', 'Satrurado/a 🤢'][i-1]}", i] }), {}, class: "form-control" %>
+          <% elsif answer_fields.object.question_id == 10 %>
+            <%= answer_fields.select :text, ["Sí", "No"], {}, class: "form-control" %>
+          <% else %>
+            <%= answer_fields.hidden_field :question_id, value: 11 %>
+            <%= answer_fields.text_field :text %>
+          <% end %>
+                <% end %>
     </div>
 
     <%= form.submit %>
