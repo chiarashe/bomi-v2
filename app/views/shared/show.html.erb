@@ -14,39 +14,39 @@
       </div>
     </div>
 
+  <% if current_user.is_a?(Doctor) %>
   <% #my recommendations card information %>
-    <div class="card recommendation-report mt-2">
-      <div class="card-body">
-        <% if current_user.is_a?(Doctor) %>
-          <h3>Mis recomendaciones:</h3>
-          <%= link_to "Agregar", new_doctor_report_recommendation_path(current_doctor, @report), class: "btn btn-outline-success rounded-pill ms-2" %>
-            <% if @recommendation.present? %>
-              <% @recommendations.each do |recommendation| %>
-                <h4>Title: <%= recommendation.title %></h4>
-                <p>Comment: <%= recommendation.comments %></p>
-                <%= link_to "Borrar", recommendation_path(recommendation), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn btn-outline-danger rounded-pill ms-2" %>
-                <%= link_to "Editar", edit_recommendation_path(recommendation), class: "btn btn-outline-primary rounded-pill ms-2" %>
-              <% end %>
-            <% else %>
-              <p>No hay recomendaciones.</p>
-          <% end %>
+  <div class="card recommendation-report mt-2">
+    <div class="card-body">
+      <h3>Mis recomendaciones:</h3>
+      <%= link_to "Agregar", new_doctor_report_recommendation_path(current_doctor, @report), class: "btn btn-outline-success rounded-pill ms-2" %>
+      <% if @recommendation.present? %>
+        <% @recommendations.each do |recommendation| %>
+          <h4>Title: <%= recommendation.title %></h4>
+          <p>Comment: <%= recommendation.comments %></p>
+          <%= link_to "Borrar", recommendation_path(recommendation), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn btn-outline-danger rounded-pill ms-2" %>
+          <%= link_to "Editar", edit_recommendation_path(recommendation), class: "btn btn-outline-primary rounded-pill ms-2" %>
         <% end %>
-      </div>
-     </div>
+      <% else %>
+        <p>No hay recomendaciones.</p>
+      <% end %>
+    </div>
+  </div>
 
   <% #recommendations from other doctors card information %>
-    <div class="card recommendation-report mt-2">
-      <div class="card-body">
-        <h3>Recomendaciones de otros profesionales:</h3>
-        <% @patient.doctors.where.not(id: current_doctor.id).each do |doctor| %>
-          <h3>Doctor: <%= doctor.first_name %></h3>
-          <% doctor.recommendations.where(patient: @patient).each do |recommendation| %>
-            <h4>Title: <%= recommendation.title %></h4>
-            <p>Comment: <%= recommendation.comments %></p>
-          <% end %>
+  <div class="card recommendation-report mt-2">
+    <div class="card-body">
+      <h3>Recomendaciones de otros profesionales:</h3>
+      <% @patient.doctors.where.not(id: current_user.id).each do |doctor| %>
+        <h3>Doctor: <%= doctor.first_name %></h3>
+        <% doctor.recommendations.where(patient: @patient).each do |recommendation| %>
+          <h4>Title: <%= recommendation.title %></h4>
+          <p>Comment: <%= recommendation.comments %></p>
         <% end %>
-      </div>
+      <% end %>
     </div>
+  </div>
+<% end %>
 
   <% #medicines card information %>
     <div class="card medicine-report mt-2">
