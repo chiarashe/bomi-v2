@@ -33,4 +33,8 @@ class ReportsController < ApplicationController
   def report_params
     params.require(:report).permit(:date, answers_attributes: [:id, :text, :question_id, :patient_id])
   end
+
+  def answer_params
+    params.require(:answer).permit(:question_id, answer_options_attributes: [:text, :question_id])
+  end
 end
