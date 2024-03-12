@@ -45,13 +45,13 @@
           ] %>
 
           <% options.each_with_index do |option, i| %>
-          <div class="form-check form-check-inline">
-            <%= answer_fields.check_box :text, { multiple: true, id: "option_#{i}" }, option[:text], nil %>
-            <label class="form-check-label" for="option_<%= i %>">
-              <%= option[:emoji] %> <%= option[:text] %>
-            </label>
-          </div>
-        <% end %>
+            <div class="form-check form-check-inline">
+              <%= answer_fields.check_box :text, { multiple: true, id: "option_#{i}" }, option[:text], nil %>
+              <label class="form-check-label" for="option_<%= i %>">
+                <%= option[:emoji] %> <%= option[:text] %>
+              </label>
+            </div>
+          <% end %>
 
           <% elsif answer_fields.object.question_id == 7 %>
             <%= answer_fields.select :text, ["Solo/a", "Pareja", "Familia", "Amigo/a(s)", "Compañero/a(s) de trabajo/escuela", "Grupo", "Otro"], {}, class: "form-control" %>

@@ -1,0 +1,58 @@
+  <% #patient card information %>
+    <div class="card patient-report">
+      <div class="card-body">
+        <h3 class="card-title"><%= @patient.first_name %> <%= @patient.last_name %></h3>
+        <p class="card-text">Fecha de nacimiento: <%= @patient.date_birth %></p>
+        <p class="card-text">Número de telefono: <%= @patient.phone_number %></p>
+        <p class="card-text">Correo: <%= @patient.email %></p>
+        <p class="card-text">País: <%= @patient.location %></p>
+      </div>
+    </div>
+
+  <% if current_user.is_a?(Patient) %>
+  <h1>Your shared URL</h1>
+  <%= @shared_url %>
+    <div class="py-5">
+      <h2>Doctor's recommendations:</h2>
+      <% @patient.doctors.each do |doctor| %>
+        <h3>Doctor: <%= doctor.first_name %></h3> <!-- replace with your doctor's name attribute -->
+        <% doctor.recommendations.where(patient: @patient).each do |recommendation| %>
+          <h4>Title: <%= recommendation.title %></h4>
+          <p>Comment: <%= recommendation.comments %></p>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
+<h3>Filter</h3>
+    <%= form_tag('', method: :get) do %>
+    <label for="start_date">Fecha de inicio:</label>
+      <%= date_field_tag 'start_date', params[:start_date] %>
+    <label for="end_date">Fecha de fin:</label>
+      <%= date_field_tag 'end_date', params[:end_date] %>
+      <%= submit_tag 'Aplicar', class: 'btn btn-outline-primary' %>
+    <% end %>
+
+<% #answers  %>
+    <h3>Answers</h3>
+    <% @answers.group_by(&:report_id).each do |report_id, answers| %>
+      <h4>Report <%= report_id %></h4>
+      <% if answers.first && answers.first.report && answers.first.report.date %>
+        <p>Report Date: <%= answers.first.report.date.to_date.to_s %></p>
+      <% end %>
+      <ul>
+        <% answers.each do |answer| %>
+          <li><strong><%= answer.question.title %>:</strong> <%= answer.text %></li>
+          <% if answer.question_id == 6 %>
+            <li>
+              <strong><%= answer.question.title %>:</strong>
+              <% if answer.text.is_a?(Array) && answer.text.empty? %>
+                No options selected
+              <% else %>
+                <%= answer.text.is_a?(Array) ? answer.text.join(', ') : answer.text %>
+              <% end %>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+    <% end %>
