@@ -24,8 +24,8 @@
               <% @recommendations.each do |recommendation| %>
                 <h4>Title: <%= recommendation.title %></h4>
                 <p>Comment: <%= recommendation.comments %></p>
-                <%= link_to "Borrar", recommendation_path(@recommendation), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-outline-danger rounded-pill ms-2" %>
-                <%= link_to "Editar", edit_recommendation_path(@recommendation), class: "btn btn-outline-primary rounded-pill ms-2" %>
+                <%= link_to "Borrar", recommendation_path(recommendation), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn btn-outline-danger rounded-pill ms-2" %>
+                <%= link_to "Editar", edit_recommendation_path(recommendation), class: "btn btn-outline-primary rounded-pill ms-2" %>
               <% end %>
             <% else %>
               <p>No hay recomendaciones.</p>
@@ -185,8 +185,6 @@
     </div>
   <% end %>
     </div>
-  <% end %>
-
 <div class="container">
     <h3>Grafícas</h3>
 

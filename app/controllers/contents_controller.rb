@@ -1,16 +1,21 @@
 class ContentsController < ApplicationController
+  include Pundit
+  before_action :authenticate_doctor!
 
   def index
-    @contents = Content.all
+    @contents = policy_scope(Content)
   end
 
   def new
     @content = Content.new
+    authorize @content
   end
 
   def create
+    @doctor = current_doctor
     @content = Content.new(content_params)
-    @content.doctor = current_doctor
+    @content.doctor = @doctor
+    authorize @content
     if @content.save
       redirect_to content_path(@content)
     else
@@ -24,16 +29,19 @@ class ContentsController < ApplicationController
 
   def update
     @content = Content.find(params[:id])
+    authorize @content
     @content.update(content_params)
     redirect_to content_path(@content)
   end
 
   def edit
     @content = Content.find(params[:id])
+    authorize @content
   end
 
   def destroy
     @content = Content.find(params[:id])
+    authorize @content
     @content.destroy
     redirect_to dashboard_doctor_path, notice: 'Content was successfully deleted.'
   end

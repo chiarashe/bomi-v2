@@ -1,6 +1,7 @@
 class RecommendationsController < ApplicationController
+  include Pundit
   before_action :authenticate_doctor!
-  before_action :ensure_doctor
+
   def index
     @recommendations = Recommendation.all
   end
@@ -10,6 +11,7 @@ class RecommendationsController < ApplicationController
     @report = Report.find(params[:report_id])
     @patient = @report.patient
     @recommendation = Recommendation.new
+    authorize @recommendation
   end
 
   def create
@@ -20,6 +22,7 @@ class RecommendationsController < ApplicationController
     @recommendation = @report.recommendations.build(recommendation_params)
     @recommendation.doctor = current_doctor
     @recommendation.patient = @patient
+    authorize @recommendation
     if @recommendation.save
       redirect_to shared_path(id: @patient.id, token: @patient.token), notice: 'Recommendation was successfully created.'
     else
@@ -36,10 +39,12 @@ class RecommendationsController < ApplicationController
     @report = @recommendation.report
     @doctor = current_doctor
     @patient = @report.patient
+    authorize @recommendation
   end
 
   def update
     @recommendation = Recommendation.find(params[:id])
+    authorize @recommendation
     @report = @recommendation.report
     @recommendation.update(recommendation_params)
     @patient = @report.patient
@@ -48,6 +53,7 @@ class RecommendationsController < ApplicationController
 
   def destroy
     @recommendation = Recommendation.find(params[:id])
+    authorize @recommendation
     @report = @recommendation.report
     @recommendation.destroy
     @patient = @report.patient
