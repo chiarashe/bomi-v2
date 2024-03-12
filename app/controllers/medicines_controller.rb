@@ -3,6 +3,7 @@ class MedicinesController < ApplicationController
     @medicine = Medicine.new(medicine_params)
     @patient = current_patient
     @medicine.patient = @patient
+    authorize @medicine
     if @medicine.save
       redirect_to dashboard_patient_path, notice: 'Medicine was successfully added.'
     else
@@ -12,6 +13,7 @@ class MedicinesController < ApplicationController
 
   def destroy
     @medicine = Medicine.find(params[:id])
+    authorize @medicine
     @medicine.destroy
     redirect_to dashboard_patient_path, notice: 'Medicine was successfully deleted.'
   end
