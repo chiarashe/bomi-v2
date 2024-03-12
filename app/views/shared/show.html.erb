@@ -14,7 +14,6 @@
       </div>
     </div>
 
-
   <% #my recommendations card information %>
     <div class="card recommendation-report mt-2">
       <div class="card-body">
@@ -22,10 +21,15 @@
           <h3>Mis recomendaciones:</h3>
           <%= link_to "Agregar", new_doctor_report_recommendation_path(current_doctor, @report), class: "btn btn-outline-success rounded-pill ms-2" %>
             <% if @recommendation.present? %>
-              <%= link_to "Borrar", recommendation_path(@recommendation), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-outline-danger rounded-pill ms-2" %>
-              <%= link_to "Editar", edit_recommendation_path(@recommendation), class: "btn btn-outline-primary rounded-pill ms-2" %>
+              <% @recommendations.each do |recommendation| %>
+                <h4>Title: <%= recommendation.title %></h4>
+                <p>Comment: <%= recommendation.comments %></p>
+                <%= link_to "Borrar", recommendation_path(@recommendation), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-outline-danger rounded-pill ms-2" %>
+                <%= link_to "Editar", edit_recommendation_path(@recommendation), class: "btn btn-outline-primary rounded-pill ms-2" %>
+              <% end %>
             <% else %>
               <p>No hay recomendaciones.</p>
+          <% end %>
         <% end %>
       </div>
      </div>
