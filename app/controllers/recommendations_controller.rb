@@ -1,6 +1,8 @@
 class RecommendationsController < ApplicationController
   include Pundit
   before_action :authenticate_doctor!
+  before_action :set_recommendation, only: %i[show edit update destroy]
+  before_action :set_report, only: %i[new create]
 
   def index
     @recommendations = Recommendation.all
@@ -8,20 +10,13 @@ class RecommendationsController < ApplicationController
 
   def new
     @doctor = current_doctor
-    @report = Report.find(params[:report_id])
     @patient = @report.patient
     @recommendation = Recommendation.new
     authorize @recommendation
   end
 
   def create
-    @doctor = current_doctor
-    @report = Report.find(params[:report_id])
-    @patient = @report.patient
-    puts @patient.inspect
-    @recommendation = @report.recommendations.build(recommendation_params)
-    @recommendation.doctor = current_doctor
-    @recommendation.patient = @patient
+    build_recommendation
     authorize @recommendation
     if @recommendation.save
       redirect_to shared_path(id: @patient.id, token: @patient.token), notice: 'Recommendation was successfully created.'
@@ -31,11 +26,9 @@ class RecommendationsController < ApplicationController
   end
 
   def show
-    @recommendation = Recommendation.find(params[:id])
   end
 
   def edit
-    @recommendation = Recommendation.find(params[:id])
     @report = @recommendation.report
     @doctor = current_doctor
     @patient = @report.patient
@@ -43,7 +36,6 @@ class RecommendationsController < ApplicationController
   end
 
   def update
-    @recommendation = Recommendation.find(params[:id])
     authorize @recommendation
     @report = @recommendation.report
     @recommendation.update(recommendation_params)
@@ -52,7 +44,6 @@ class RecommendationsController < ApplicationController
   end
 
   def destroy
-    @recommendation = Recommendation.find(params[:id])
     authorize @recommendation
     @report = @recommendation.report
     @recommendation.destroy
@@ -66,9 +57,23 @@ class RecommendationsController < ApplicationController
     params.require(:recommendation).permit(:title, :comments, :link_content, :done, :report_id, :patient_id, :doctor_id, :attachment, :text)
   end
 
+  def set_recommendation
+    @recommendation = Recommendation.find(params[:id])
+  end
+
+  def set_report
+    @report = Report.find(params[:report_id])
+  end
+
+  def build_recommendation
+    @doctor = current_doctor
+    @patient = @report.patient
+    @recommendation = @report.recommendations.build(recommendation_params)
+    @recommendation.doctor = @doctor
+    @recommendation.patient = @patient
+  end
+
   def ensure_doctor
-    unless Doctor.exists?(current_doctor.id)
-      redirect_to dashboard_doctor_path, alert: 'You are not authorized to view this page'
-    end
+    redirect_to dashboard_doctor_path, alert: 'You are not authorized to view this page' unless current_doctor
   end
 end

@@ -5,21 +5,16 @@ class ReportsController < ApplicationController
   def new
     @report = Report.new(patient: @patient)
     authorize @report
-    Question.all.each do |question|
-      @report.answers.build(question_id: question.id, patient_id: @patient.id)
-    end
+    build_answers
   end
 
   def create
     @report = @patient.reports.build(report_params)
     authorize @report
     if @report.save
-      @report.answers.each do |answer|
-        answer.update(patient_id: @patient.id)
-      end
+      update_answers_patient_id
       redirect_to dashboard_patient_path, notice: 'Report was successfully created.'
     else
-      puts @report.errors.full_messages
       render :new
     end
   end
@@ -31,10 +26,22 @@ class ReportsController < ApplicationController
   end
 
   def report_params
-    params.require(:report).permit(:date, answers_attributes: [:id, :text, :question_id, :patient_id])
+    params.require(:report).permit(:date, answers_attributes: %i[id text question_id patient_id])
   end
 
   def answer_params
-    params.require(:answer).permit(:question_id, answer_options_attributes: [:text, :question_id])
+    params.require(:answer).permit(:question_id, answer_options_attributes: %i[text question_id])
+  end
+
+  def build_answers
+    Question.all.each do |question|
+      @report.answers.build(question_id: question.id, patient_id: @patient.id)
+    end
+  end
+
+  def update_answers_patient_id
+    @report.answers.each do |answer|
+      answer.update(patient_id: @patient.id)
+    end
   end
 end
