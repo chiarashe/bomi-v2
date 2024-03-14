@@ -1,8 +1,9 @@
 class MedicinesController < ApplicationController
+  before_action :set_medicine, only: [:destroy]
+
   def create
     @medicine = Medicine.new(medicine_params)
-    @patient = current_patient
-    @medicine.patient = @patient
+    @medicine.patient = current_patient
     authorize @medicine
     if @medicine.save
       redirect_to dashboard_patient_path, notice: 'Medicine was successfully added.'
@@ -12,15 +13,24 @@ class MedicinesController < ApplicationController
   end
 
   def destroy
-    @medicine = Medicine.find(params[:id])
     authorize @medicine
-    @medicine.destroy
-    redirect_to dashboard_patient_path, notice: 'Medicine was successfully deleted.'
+    if @medicine.destroy
+      redirect_to dashboard_patient_path, notice: 'Medicine was successfully deleted.'
+    else
+      redirect_to dashboard_patient_path, alert: 'Medicine was not deleted. Try again.'
+    end
   end
 
   private
 
+  def set_medicine
+    @medicine = Medicine.find(params[:id])
+  end
+
   def medicine_params
-    params.require(:medicine).permit(:name, :dosage, :times_a_day, :duration, :start_date, :end_date, :recommended_by, :patient_id)
+    params.require(:medicine).permit(
+      :name, :dosage, :times_a_day, :duration,
+      :start_date, :end_date, :recommended_by, :patient_id
+    )
   end
 end
