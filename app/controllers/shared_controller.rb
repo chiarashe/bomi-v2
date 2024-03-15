@@ -3,6 +3,21 @@ class SharedController < ApplicationController
   before_action :authenticate_user!
 
   def show
+
+    #report table with filter
+    @patient = Patient.find(params[:id])
+    if params[:start_date].present? && params[:end_date].present?
+      start_date = Date.parse(params[:start_date])
+      end_date = Date.parse(params[:end_date])
+      @reports = @patient.reports.where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+    else
+      @reports = @patient.reports
+    end
+    @questions = Question.all
+    @answers_by_report = @reports.map do |report|
+      { report: report, answers: report.answers }
+    end
+
     @shared_url = generate_shared_url(@patient)
     @report = Report.find(params[:id])
     @doctors = @patient.doctors
@@ -68,6 +83,16 @@ class SharedController < ApplicationController
     @data_8 = @hunger_type.zip(@emotion_type).group_by(&:itself).transform_values(&:count)
 
 
+    start_date = params[:start_date].present? ? Date.parse(params[:start_date]) : nil
+    end_date = params[:end_date].present? ? Date.parse(params[:end_date]) : nil
+
+    @no_dates_alimentacion = Answer.joins(:report).where(patient_id: @patient.id, question_id: 2, text: "No").pluck('reports.date')
+    @no_dates_recomendacion = Answer.joins(:report).where(patient_id: @patient.id, question_id: 4, text: "No").pluck('reports.date')
+    @emociones_positivas = Answer.joins(:report).where(patient_id: @patient.id, question_id: 6, text: "5").pluck('reports.date')
+
+    @no_dates_recomendacion.select! do |date|
+      (start_date.nil? || date >= start_date) && (end_date.nil? || date <= end_date)
+    end
 
   #red flags/green flags
     @yes_dates_atracon = Answer.joins(:report).where(patient_id: @patient.id, question_id: 10, text: "Sí").pluck('reports.date')
@@ -75,7 +100,6 @@ class SharedController < ApplicationController
     @no_dates_recomendacion = Answer.joins(:report).where(patient_id: @patient.id, question_id: 4, text: "No").pluck('reports.date')
     @emociones_positivas = Answer.joins(:report).where(patient_id: @patient.id, question_id: 6, text: "5").pluck('reports.date')
   end
-
   private
 
   def authenticate_user!
@@ -111,4 +135,5 @@ class SharedController < ApplicationController
   def set_doctor
     @doctor = Doctor.find(params[:id])
   end
+
 end
