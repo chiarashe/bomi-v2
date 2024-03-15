@@ -11,4 +11,10 @@ class PatientsController < ApplicationController
   def set_patient
     @patient = current_patient
   end
+
+  def answers
+    @patient = Patient.find(params[:id])
+    @questions = Question.all
+    @answers = @patient.answers
+  end
 end
