@@ -1,0 +1,8 @@
+
+<nav class="navbar sticky-bottom navbar-light bg-light">
+  <div class="container-fluid">
+    <%= link_to "Registo ✍️ ", new_patient_report_path(@patient), style: "text-decoration: none" %>
+    <%= link_to "Reporte 📈", shared_path(id: @patient.id, token: @patient.token), style: "text-decoration: none" %>
+    <%= link_to "Recursos 📚", contents_path, class: "button", style: "text-decoration: none" %>
+  </div>
+</nav>

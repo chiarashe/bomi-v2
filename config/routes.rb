@@ -31,5 +31,5 @@ Rails.application.routes.draw do
     end
   end
   resources :contents, only: [:index, :show, :new, :create, :edit, :update, :destroy]
-  resources :medicines, only: [:create, :update, :destroy]
+  resources :medicines, only: [:new, :create, :updare, :destroy]
 end

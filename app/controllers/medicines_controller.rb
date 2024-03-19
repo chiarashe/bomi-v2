@@ -1,6 +1,10 @@
 class MedicinesController < ApplicationController
   before_action :set_medicine, only: [:destroy]
 
+  def new
+    @medicine = Medicine.new
+  end
+
   def create
     @medicine = Medicine.new(medicine_params)
     @medicine.patient = current_patient
@@ -11,6 +15,7 @@ class MedicinesController < ApplicationController
       redirect_to dashboard_patient_path, alert: 'Medicine was not added. Try again.'
     end
   end
+
 
   def destroy
     authorize @medicine

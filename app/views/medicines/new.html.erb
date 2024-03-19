@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="mt-3 w-50 p-3 border col-6">
+  <h3>Agregar una medicina:</h3>
+    <%= simple_form_for @medicine do |f| %>
+      <%= f.input :name, label: "Nombre" %>
+      <%= f.input :dosage, label: "Dosis" %>
+      <%= f.input :times_a_day, label: "Frecuencia" %>
+      <%= f.input :duration, label: "Por cuanto tiempo" %>
+      <%= f.input :start_date, label: "Fecha de inicio" %>
+      <%= f.input :end_date, label: "Fecha de conclusión" %>
+      <%= f.input :recommended_by, label: "Doctor que recomendó (NA si no aplica)" %>
+      <%= f.input :patient_id, as: :hidden, input_html: { value: @patient.id } %>
+      <%= f.button :submit %>
+    <% end %>
+  </div>
+  <div class="mt-3 w-50 p-3 border col-6">
+    <h3>Medicinas:</h3>
+    <% if @patient.medicines.any? %>
+      <% @patient.medicines.each do |medicine| %>
+        <p>Nombre: <%= medicine.name %></p>
+        <p>Dosis: <%= medicine.dosage %></p>
+        <p>Veces al dia: <%= medicine.times_a_day %></p>
+        <p>Durante <%= medicine.duration %> dias</p>
+        <p>Comenzando el: <%= medicine.start_date %></p>
+        <p>Concluyendo el: <%= medicine.end_date %></p>
+        <p>Recomendado por: <%= medicine.recommended_by %></p>
+        <%= link_to "Delete this medicine", medicine_path(medicine), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
