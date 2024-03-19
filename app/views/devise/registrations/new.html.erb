@@ -11,13 +11,13 @@
         <%= f.input :cedula_profesional, required: true %>
         <%= f.input :curp, label:"CURP", required: true %>
         <%= f.input :profession, as: :select, collection: Doctor::PROFESSION, label:"Profesion", required: true %>
-        <%= f.input :location, label:"Pais", required: true %>
+        <%= f.country_select :location, priority_countries: ["MX", "US"], label:"Pais", required: true %>
       <% elsif resource.is_a?(Patient) %>
         <%= f.input :first_name, label:"Nombre", required: true %>
         <%= f.input :last_name, label:"Apellido", required: true %>
         <%= f.input :phone_number, label:"Celular", required: true %>
         <%= f.input :goal, label:"Meta", required: true %>
-        <%= f.input :location, label:"Pais", required: true %>
+        <%= f.country_select :location, priority_countries: ["MX", "US"], label:"Pais", required: true %>
       <% end %>
       <%= f.input :email,
                   required: true,
