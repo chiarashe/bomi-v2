@@ -1,49 +1,86 @@
 <%= render "shared/navbar_patient" %>
 
 <div class="container p-2">
-  <div class="profile">
-    <h2>Bienvenido al dashboard de pacientes</h2>
-      <p>Nombre: <%= @patient.first_name %></p>
-      <p>Apellido: <%= @patient.last_name %></p>
-      <p>Meta: <%= @patient.goal %></p>
-      <%= link_to "Cambiar información", edit_patient_registration_path, class: "button" %>
+  <h2 style="text-align: center;">👋 Hola <%= @patient.first_name %></h2>
+  <div class="card profile-patient mb-2">
+    <div class="card-body mb-0">
+      <h4 style="text-align: center;">Tu información:</h4>
+        <p class="card-text" style="line-height: 0.8;">Nombre Completo: <%= @patient.first_name %> <%= @patient.last_name %></p>
+        <p class="card-text" style="line-height: 0.8;">Celular: <%= @patient.phone_number %></p>
+        <p class="card-text" style="line-height: 0.8;">Correo: <%= @patient.email %></p>
+        <p class="card-text" style="line-height: 0.8;">Fecha de Nacimiento: <%= @patient.date_birth %></p>
+        <p class="card-text" style="line-height: 0.8;">País: <%= @patient.location %></p>
+        <div class="d-flex justify-content-between">
+        <p class="card-text" style="line-height: 0.8;">Tu meta: <%= @patient.goal %></p>
+          <h3><%= link_to '<i class="fas fa-pen-square"></i>'.html_safe, edit_patient_registration_path, class: "button", style: "line-height: 0.8; text-decoration: none;" %></h3>
+        </div>
+      </div>
+    </div>
+
+  <div class="d-flex justify-content-inbetween mb-2">
+    <div class="card register-report">
+      <div class="card-body">
+        <%= link_to "Registo diario ✍️ ", new_patient_report_path(@patient), style: "font-size: 14px;" %>
+      </div>
+    </div>
+
+    <div class="card register-medicine" style="wrap">
+      <div class="card-body">
+      <p style="font-size: 14px;">Registo Medicina 💊</p>
+      </div>
+    </div>
   </div>
 
-  <div class="p-3 border w-25">
-    <h3>My doctors: </h3>
+  <div class="card my-reports mb-2">
+    <div class="card-body">
+      <%= link_to "Mi Reporte 📈", shared_path(id: @patient.id, token: @patient.token) %>
+    </div>
+  </div>
+
+  <div class="card content-index mb-2">
+    <div class="card-body">
+      <%= link_to "Ver recursos 📚", contents_path, class: "button" %>
+    </div>
+  </div>
+
+<div class="card my-doctors mb-2" style="overflow: auto; word-wrap: break-word;">
+  <div class="card-body">
+    <h4 style="text-align: center;">Mis profesionales de salud: </h4>
     <% if @patient.doctors.any? %>
       <% @patient.doctors.each do |doctor| %>
-        <p><%= doctor.first_name %> <%= doctor.last_name %></p>
+        <p class="card-text" style="line-height: 0.8;"><%= doctor.first_name %> <%= doctor.last_name %></p>
         <% relation = @patient.relations.find_by(doctor: doctor) %>
-        <p>Status: <%= relation.status.capitalize %></p>
-        <% if relation.status == 'pending' %>
-          <%= link_to "Confirm", update_status_relation_path(relation, status: 'confirmed'), data: { turbo_method: :patch } %>
-          <%= link_to "Deny", update_status_relation_path(relation, status: 'denied'), data: { turbo_method: :patch } %>
-        <% end %>
-        <%= link_to "Delete this doctor", relation_path(relation), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+        <div style="display: flex; justify-content: space-between;">
+          <p class="card-text" style="line-height: 0.8;">Status: <%= relation.status.capitalize %></p>
+          <% if relation.status == 'pending' %>
+            <div>
+              <%= link_to '<i class="fas fa-check-square"></i>'.html_safe, update_status_relation_path(relation, status: 'confirmed'), data: { turbo_method: :patch } %>
+              <%= link_to '<i class="fas fa-times-square"></i>'.html_safe, update_status_relation_path(relation, status: 'denied'), data: { turbo_method: :patch } %>
+            </div>
+          <% end %>
+          <div>
+            <%= link_to '<i class="fas fa-user-times"></i>'.html_safe, relation_path(relation), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+          </div>
+        </div>
+        <hr style="margin-top: 5px; margin-bottom: 5px;">
       <% end %>
     <% end %>
   </div>
+</div>
 
-  <div class="all-content">
-    <%= link_to "Ver recursos", contents_path, class: "button" %>
+  <div class="card QR-patient">
+    <div class="card-body">
+      <h4 style="text-align: center;">Tu codigo QR para compartir</h4>
+      <div>
+        <%= raw @svg %>
+      </div>
+    </div>
   </div>
 </div>
-<%= link_to "Report", new_patient_report_path(@patient) %>
 
-<% if @answers %>
-  <% @answers.each do |answer| %>
-    <p><%= answer.text %></p>
-  <% end %>
-<% else %>
-  <p>No answers yet.</p>
-<% end %>
 
-<h3>Your QR Code</h3>
-<%= link_to "Go to shared page (temporary button)", shared_path(id: @patient.id, token: @patient.token) %>
-<div>
-  <%= raw @svg %>
-</div>
+
+
 
 <div class="row">
   <div class="mt-3 w-50 p-3 border col-6">
@@ -76,3 +113,5 @@
     <% end %>
   </div>
 </div>
+
+<%= render "shared/navbar_bottom" %>
