@@ -1,30 +1,46 @@
-  <% #patient card information %>
-    <div class="card patient-report">
-      <div class="card-body">
-        <h3 class="card-title"><%= @patient.first_name %> <%= @patient.last_name %></h3>
-        <p class="card-text">Fecha de nacimiento: <%= @patient.date_birth %></p>
-        <p class="card-text">Número de telefono: <%= @patient.phone_number %></p>
-        <p class="card-text">Correo: <%= @patient.email %></p>
-        <p class="card-text">País: <%= @patient.location %></p>
-      </div>
-    </div>
 
-  <% if current_user.is_a?(Patient) %>
-  <h1>Your shared URL</h1>
-  <%= @shared_url %>
+<% if current_user.is_a?(Patient) %>
+<% #share code report %>
+  <div class="card">
+    <div class="card-body">
+      <h2>Tu codigo</h2>
+      <%= @shared_url %>
+    </div>
+  </div>
+
+<% #recommendations card %>
     <div class="py-5">
-      <h2>Doctor's recommendations:</h2>
+      <h2>Recomendaciones: </h2>
       <% @patient.doctors.each do |doctor| %>
-        <h3>Doctor: <%= doctor.first_name %></h3> <!-- replace with your doctor's name attribute -->
+        <h5>Doctor: <%= doctor.first_name %></h5> <!-- replace with your doctor's name attribute -->
         <% doctor.recommendations.where(patient: @patient).each do |recommendation| %>
-          <h4>Title: <%= recommendation.title %></h4>
-          <p>Comment: <%= recommendation.comments %></p>
+        <ul>
+          <li>Titulo: <%= recommendation.title %></li>
+          <li>Comentario: <%= recommendation.comments %></li>
+          <li>Creado: <%= recommendation.created_at.strftime("%B %d, %Y") %></li>
+        </ul>
         <% end %>
+        <hr>
       <% end %>
     </div>
   <% end %>
 
-<h3>Filter</h3>
+    <% #medicines card information %>
+    <div class="card medicine-report mt-2">
+      <div class="card-body">
+        <h3> Medicinas: </h3>
+        <% @patient.medicines.each do |medicine| %>
+          <p style="margin-top: 0; margin-bottom: 0;">Nombre: <strong><%= medicine.name %></strong> - Dosis: <strong><%= medicine.dosage %></strong></p>
+          <p style="margin-top: 0; margin-bottom: 0;">Frecuencia: <%= medicine.times_a_day %> - Duración: <%= medicine.duration %></p>
+          <p style="margin-top: 0; margin-bottom: 0;">Del <%= medicine.start_date %> al <%= medicine.end_date %></p>
+          <p style="margin-top: 0; margin-bottom: 0;">Recomendado por: <%= medicine.recommended_by %></p>
+          <hr style="margin-top: 5px; margin-bottom: 5px;">
+        <% end %>
+      </div>
+    </div>
+
+<% #filter  %>
+  <h3>Filtro</h3>
     <%= form_tag('', method: :get) do %>
     <label for="start_date">Fecha de inicio:</label>
       <%= date_field_tag 'start_date', params[:start_date] %>
@@ -34,25 +50,31 @@
     <% end %>
 
 <% #answers  %>
-    <h3>Answers</h3>
-    <% @answers.group_by(&:report_id).each do |report_id, answers| %>
-      <h4>Report <%= report_id %></h4>
-      <% if answers.first && answers.first.report && answers.first.report.date %>
-        <p>Report Date: <%= answers.first.report.date.to_date.to_s %></p>
-      <% end %>
-      <ul>
-        <% answers.each do |answer| %>
-          <li><strong><%= answer.question.title %>:</strong> <%= answer.text %></li>
-          <% if answer.question_id == 6 %>
-            <li>
-              <strong><%= answer.question.title %>:</strong>
-              <% if answer.text.is_a?(Array) && answer.text.empty? %>
-                No options selected
-              <% else %>
-                <%= answer.text.is_a?(Array) ? answer.text.join(', ') : answer.text %>
+<div class="container mt-4">
+  <div class="card graphs d-flex-wrap" style="max-height: 500px; overflow-y: auto;">
+    <div class="card-body p-2">
+      <h3>Respuestas</h3>
+      <table class="table" style="background-color: #e3f4f6;">
+        <thead>
+          <tr>
+            <th class="small">Report</th>
+            <% @questions.each do |question| %>
+              <th class="small"><%= question.title %></th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody class="small">
+          <% @answers_by_report.each do |report_answers| %>
+            <tr>
+              <td>Report <%= report_answers[:report].id %> (<%= report_answers[:report].created_at.strftime('%d/%m/%Y') %>)</td>
+              <% @questions.each do |question| %>
+                <% answer = report_answers[:answers].find { |a| a.question_id == question.id } %>
+                <td><%= answer.text if answer %></td>
               <% end %>
-            </li>
+            </tr>
           <% end %>
-        <% end %>
-      </ul>
-    <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
