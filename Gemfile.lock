@@ -118,6 +118,10 @@ GEM
       rest-client (>= 2.0.0)
     concurrent-ruby (1.2.3)
     connection_pool (2.4.1)
+    countries (6.0.0)
+      unaccent (~> 0.3)
+    country_select (9.0.0)
+      countries (> 5.0, < 7.0)
     crass (1.0.6)
     date (3.3.4)
     debug (1.9.1)
@@ -292,6 +296,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    select2-rails (4.0.13)
     selenium-webdriver (4.17.0)
       base64 (~> 0.2)
       rexml (~> 3.2, >= 3.2.5)
@@ -322,6 +327,7 @@ GEM
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    unaccent (0.4.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.2.1)
@@ -350,6 +356,8 @@ DEPENDENCIES
   capybara
   chartkick
   cloudinary
+  countries
+  country_select
   debug
   devise
   dotenv-rails
@@ -365,6 +373,7 @@ DEPENDENCIES
   rails_admin (= 3.0)
   rqrcode
   sassc-rails
+  select2-rails
   selenium-webdriver
   simple_form!
   sprockets-rails
