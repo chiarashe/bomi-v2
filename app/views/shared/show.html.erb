@@ -1,9 +1,8 @@
-<div class="container p-4">
-  <h1>Report</h1>
-<div class="col-12 d-flex flex-wrap">
-  <div class="col-4">
+<div class="container p-2">
+  <h1>Reporte</h1>
     <% if current_user.is_a?(Doctor) %>
       <%= render 'doctor_view' %>
     <% else %>
       <%= render 'patient_view' %>
     <% end %>
+</div>
