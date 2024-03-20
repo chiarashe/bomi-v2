@@ -12,6 +12,12 @@ class Patient < ApplicationRecord
   has_many :recommendations
   has_many :medicines
 
+  def self.send_daily_report_reminder
+    all.each do |patient|
+      ReportMailer.daily_report_reminder(patient).deliver_now
+    end
+  end
+
   private
 
   def generate_token

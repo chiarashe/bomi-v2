@@ -13,9 +13,11 @@
 
 # Ignore all logfiles and tempfiles.
 /log/*
-/tmp/*
 !/log/.keep
+!/log/cron.log
+/tmp/*
 !/tmp/.keep
+
 
 # Ignore pidfiles, but keep the directory.
 /tmp/pids/*
