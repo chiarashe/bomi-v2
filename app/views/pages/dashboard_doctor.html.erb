@@ -1,41 +1,64 @@
 <%= render "shared/navbar_doc" %>
 <div class="container p-2">
-  <div class="profile">
-    <h2>Bienvenido al dashboard de doctores</h2>
+    <h2 style="text-align: center;">👋 Hola <%= @doctor.first_name %></h2>
+  <div class="row">
+    <div class="col-12 col-md-6 col-lg-6">
+      <div class="card profile-doctor mb-2">
+        <div class="card-body">
+          <h3 style="text-align: center;">Mi información:</h3>
+            <p class="card-text" style="line-height: 0.8;">Nombre: <%= @doctor.first_name %> <%= @doctor.last_name %></p>
+            <p class="card-text" style="line-height: 0.8;">Celular: <%= @doctor.phone_number %></p>
+            <p class="card-text" style="line-height: 0.8;">Profesion: <%= @doctor.profession %></p>
+            <div class="d-flex justify-content-between">
+            <p class="card-text" style="line-height: 0.8;">País: <%= @doctor.location %></p>
+            <%= link_to '<i class="fas fa-pen-square"></i>'.html_safe, edit_doctor_registration_path, class: "button" %>
+          </div>
+        </div>
+      </div>
 
-    <p>Nombre: <%= @doctor.first_name %></p>
-    <p>Apellido: <%= @doctor.last_name %></p>
-    <p>Celular: <%= @doctor.phone_number %></p>
-    <p>Profesion: <%= @doctor.profession %></p>
-    <p>Pais: <%= @doctor.location %></p>
-    <%= link_to "Cambiar información", edit_doctor_registration_path, class: "button" %>
+      <h3 style="text-align: center; margin-top: 20px;">Mis pacientes</h3>
+      <% if @doctor.patients.any? %>
+        <% @doctor.patients.each do |patient| %>
+          <div class="card mypatients-doctor mb-2">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <strong><%= patient.first_name %> <%= patient.last_name %></strong>
+                </div>
+                <div class="col text-center">
+                  <%= link_to "Reporte 📈", shared_path(id: patient.id, token: patient.token) %>
+                </div>
+                <div class="col text-right">
+                  <% relation = @doctor.relations.find_by(patient: patient) %>
+                  <% if relation %>
+                    Status: <%= relation.status.capitalize %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <p>No tienes pacientes aún.</p>
+      <% end %>
+    </div>
+
+
+    <div class="col-12 col-md-6 col-lg-6">
+      <div class="contents">
+        <h3 style="text-align: center;">Mi contenido</h3>
+            <% @contents.each do |content| %>
+              <div class="card content-doctor mb-2">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <%= link_to content.title, content_path(content) %>
+                    <small>Publicado el: <%= content.created_at.strftime("%B %d, %Y") %></small>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+        <%= link_to "Crear contenido", new_content_path, class: "button btn-success" %>
+      </div>
+    </div>
   </div>
-
-  <h3>Mis pacientes</h3>
-  <% if @doctor.patients.any? %>
-    <ul>
-      <% @doctor.patients.each do |patient| %>
-        <li>
-          <%= link_to patient.first_name, shared_path(id: patient.id, token: patient.token) %>
-          <% relation = @doctor.relations.find_by(patient: patient) %>
-          <% if relation %>
-            - Status: <%= relation.status.capitalize %>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
-  <% else %>
-    <p>No tienes pacientes aún.</p>
-  <% end %>
-
-  <div class="contents">
-    <h3>Mis contenidos</h3>
-    <ul>
-      <% @contents.each do |content| %>
-        <li>
-          <%= link_to content.title, content_path(content) %>
-        </li>
-      <% end %>
-    </ul>
-  <%= link_to "Crear contenido", new_content_path, class: "button" %>
 </div>
