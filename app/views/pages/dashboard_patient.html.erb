@@ -48,10 +48,10 @@
     <h4 style="text-align: center;">Mis profesionales de salud: </h4>
     <% if @patient.doctors.any? %>
       <% @patient.doctors.each do |doctor| %>
-        <p class="card-text" style="line-height: 0.8;"><%= doctor.first_name %> <%= doctor.last_name %></p>
+        <p class="card-text mt-3" style="line-height: 0.8;"><%= doctor.first_name %> <%= doctor.last_name %></p>
         <% relation = @patient.relations.find_by(doctor: doctor) %>
         <div style="display: flex; justify-content: space-between;">
-          <p class="card-text" style="line-height: 0.8;">Status: <%= relation.status.capitalize %></p>
+          <p class="card-text mb-1" style="line-height: 0.8;">Status: <%= relation.status.capitalize %></p>
           <% if relation.status == 'pending' %>
             <div>
               <%= link_to '<i class="fas fa-check-square"></i>'.html_safe, update_status_relation_path(relation, status: 'confirmed'), data: { turbo_method: :patch } %>
