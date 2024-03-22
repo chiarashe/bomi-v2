@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container p-2">
   <h3><%= @content.title %></h3>
   <p><%= @content.text %></p>
   <p><%= @content.theme_type %></p>
@@ -17,4 +17,28 @@
   <%= link_to "Regresar", dashboard_doctor_path, class: "button" %>
   <%= link_to "Editar", edit_content_path(@content), class: "button" %>
   <%= link_to "Eliminar", content_path(@content), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "shareable-link mb-3 text-decoration-none ms-5"%>
+
+
+
+  <div class="card-trip">
+  <div class="card-trip-photo">
+    <% if @content.photos.attached? %>
+      <%= image_tag @content.photos.first, class: "card-trip-photo" %>
+    <% else %>
+      <img src="https://raw.githubusercontent.com/lewagon/fullstack-images/master/uikit/greece.jpg" />
+    <% end %>
+  <div class="card-trip-infos">
+    <div>
+      <h2><%= @content.title %></h2>
+        <p><%= @content.text %></p>
+      <p><%= @content.theme_type %></p>
+      <p><%= @content.content_type %></p>
+    </div>
+    <% if @doctor.photo.attached? %>
+      <%= image_tag @doctor.photo, class: "card-trip-user avatar-large" %>
+    <% else %>
+      <%= image_tag "default-avatar.png", class: "card-trip-user card-trip-user avatar-large" %>
+    <% end %>
+  </div>
+</div>
 </div>

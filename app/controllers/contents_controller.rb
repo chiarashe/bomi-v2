@@ -24,6 +24,8 @@ class ContentsController < ApplicationController
   end
 
   def show
+    @content = Content.find(params[:id])
+    @doctor = @content.doctor
   end
 
   def update
