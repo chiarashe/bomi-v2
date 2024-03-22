@@ -23,6 +23,8 @@
           </div>
         <% elsif answer_fields.object.question_id == 1 %>
           <%= answer_fields.select :text, ["Desayuno", "Snack", "Comida", "Cena"], {}, { class: "form-control" } %>
+
+          <% #aqui es donde empieza los multiselct del checkbox %>
         <% elsif answer_fields.object.question_id == 6 %>
           <% options = [
             { emoji: '😃', text: 'Feliz' },
@@ -52,6 +54,7 @@
               </label>
             </div>
           <% end %>
+        <% #aqui se termina el multiselect de los checkboxes %>
 
           <% elsif answer_fields.object.question_id == 7 %>
             <%= answer_fields.select :text, ["Solo/a", "Pareja", "Familia", "Amigo/a(s)", "Compañero/a(s) de trabajo/escuela", "Grupo", "Otro"], {}, class: "form-control" %>

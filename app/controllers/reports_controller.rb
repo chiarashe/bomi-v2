@@ -8,6 +8,7 @@ class ReportsController < ApplicationController
     build_answers
   end
 
+  #aqui se crea el reporte con las respuestas
   def create
     @report = @patient.reports.build(report_params)
     authorize @report
