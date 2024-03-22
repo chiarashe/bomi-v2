@@ -8,6 +8,7 @@ class Doctor < ApplicationRecord
   has_many :patients, through: :relations
   has_many :contents
   has_many :recommendations
+  has_one_attached :photo
 
   PROFESSION = %w[Medico Nutriólogo Nutricionista Psicólogo Psiquiatra Otro]
 end

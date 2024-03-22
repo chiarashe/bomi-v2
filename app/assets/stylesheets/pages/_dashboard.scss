@@ -45,7 +45,7 @@
 .profile-doctor {
   border-radius: 2rem;
   background-color: #FB9869;
-  height: 180px;
+  height: 200px;
   width: 100%;
 }
 
@@ -59,4 +59,38 @@
   border-radius: 2rem;
   background-color: #c5f0cc;
   width: 100%;
+}
+
+
+.profile-photo {
+  width: 30%; /* Make the image take up the full width of its container */
+  height: auto; /* Keep the original aspect ratio */
+  object-fit: cover; /* Resize the image to cover its container while maintaining its aspect ratio */
+  border-radius: 20%; /* Make the image rounded */
+  max-height: 120px;
+}
+
+
+.profile-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.profile-text {
+  margin-left: 20px; /* Add some space between the image and the text */
+}
+
+.testing {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.instructions {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  background-color: #e3f4f6;
+  border-radius: 2rem;
 }

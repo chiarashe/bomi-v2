@@ -6,13 +6,18 @@
       <div class="card profile-doctor mb-2">
         <div class="card-body">
           <h3 style="text-align: center;">Mi información:</h3>
-            <p class="card-text" style="line-height: 0.8;">Nombre: <%= @doctor.first_name %> <%= @doctor.last_name %></p>
-            <p class="card-text" style="line-height: 0.8;">Celular: <%= @doctor.phone_number %></p>
-            <p class="card-text" style="line-height: 0.8;">Profesion: <%= @doctor.profession %></p>
-            <div class="d-flex justify-content-between">
-            <p class="card-text" style="line-height: 0.8;">País: <%= @doctor.location %></p>
-            <%= link_to '<i class="fas fa-pen-square"></i>'.html_safe, edit_doctor_registration_path, class: "button" %>
-          </div>
+            <div class="profile-container">
+              <%= image_tag @doctor.photo, class: 'profile-photo' if @doctor.photo.attached? %>
+              <div class="profile-text">
+                  <p class="card-text" style="line-height: 0.8;">Nombre: <%= @doctor.first_name %> <%= @doctor.last_name %></p>
+                  <p class="card-text" style="line-height: 0.8;">Celular: <%= @doctor.phone_number %></p>
+                  <p class="card-text" style="line-height: 0.8;">Profesion: <%= @doctor.profession %></p>
+                  <div class="testing d-flex justify-content-between">
+                  <p class="card-text" style="line-height: 0.8;">País: <%= @doctor.location %></p>
+                  <%= link_to ('<i class="fas fa-pen-square"></i>'.html_safe + " Modificar"), edit_doctor_registration_path, class: "button" %>
+                </div>
+              </div>
+            </div>
         </div>
       </div>
 
@@ -41,12 +46,23 @@
       <% else %>
         <p>No tienes pacientes aún.</p>
       <% end %>
+
+      <div class="card instructions">
+        <div class="card-body">
+          <h3 style="text-align: center;">Instrucciones</h3>
+          <p>👉 Para agregar un paciente, pídele que te comparte su codigo QR o liga</p>
+          <p>👉 Tienes que estar dentro de tu sessión para pedir permiso</p>
+        </div>
+      </div>
     </div>
 
 
     <div class="col-12 col-md-6 col-lg-6">
       <div class="contents">
+        <div class="d-flex justify-content-between mb-3 mt-2">
         <h3 style="text-align: center;">Mi contenido</h3>
+        <%= link_to ('<i class="fas fa-square-plus"></i>'.html_safe + " Crear contenido"), new_content_path, class: "btn btn-success" %>
+        </div>
             <% @contents.each do |content| %>
               <div class="card content-doctor mb-2">
                 <div class="card-body">
@@ -57,7 +73,6 @@
                 </div>
               </div>
             <% end %>
-        <%= link_to "Crear contenido", new_content_path, class: "button btn-success" %>
       </div>
     </div>
   </div>
