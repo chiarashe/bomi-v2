@@ -1,15 +1,16 @@
 questions = [
-  'Tipo de comida',
+  '¿Cómo te sientes el día de hoy?',
+  '¿Que te hizo sentir asi?',
   '¿Te fue posible alimentarte?',
   'Si la respuesta es no, ¿por qué?',
-  'Pudiste seguir las recomendaciones de tu médico?',
-  '¿Si la respuesta es no, por qué?',
-  '¿Cómo te sientes el día de hoy?',
+  'Tipo de comida',
+  '¿Qué alimentos y liquidos consumiste?',
+  '¿Sentiste que comiste descontroladamente?',
+  '¿Sentiste que comiste de forma balanceada?',
+  '¿Cúal era tu nivel de hambre antes de comer?',
+  '¿Cúal fue tu nivel de saciedad después de comer?',
   '¿Alguien te acompañó?',
-  'Nivel de hambre',
-  'Nivel de saciedad',
-  '¿Tuviste un atracón?',
-  '¿Tienes una duda o pensamiento?'
+  '¿Hay algo que quieras comentar o reflexionar sobre tu comida?',
 ]
 
 questions.each do |question_title|
