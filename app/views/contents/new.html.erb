@@ -1,12 +1,11 @@
 <div class="container">
   <h2>Crear un nuevo contenido</h2>
  <%= simple_form_for @content, html: { multipart: true } do |f| %>
-    <%= f.input :title, label:"Titulo" %>
-    <%= f.input :text, label:"Texto" %>
-    <%= f.input :theme_type, as: :select, collection: Content::THEME_TYPE, label:"Tema" %>
-    <%= f.input :content_type, as: :select, collection: Content::CONTENT_TYPE, label:"Tipo de contentido" %>
-    <%= f.input :photos, as: :file, input_html: { multiple: true } %>
-    <%= f.input :attachments, as: :file, input_html: { multiple: true } %>
+    <%= f.input :title, label:"Titulo", required: true %>
+    <%= f.input :text, label:"Texto", required: true %>
+    <%= f.input :theme_type, as: :select, collection: Content::THEME_TYPE, label:"Tema", required: true %>
+    <%= f.input :content_type, as: :select, collection: Content::CONTENT_TYPE, label:"Tipo de contentido", required: true %>
+    <%= f.input :photos, as: :file, input_html: { multiple: true }, label:"Foto(s)" %>
     <%= f.input :youtube_id, label: "YouTube Video" %>
     <%= f.button :submit %>
   <% end %>

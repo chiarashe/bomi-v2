@@ -9,23 +9,27 @@
       <%= form.fields_for :answers do |answer_fields| %>
         <%= answer_fields.hidden_field :question_id %>
         <%= answer_fields.label :text, Question.find(answer_fields.object.question.id).title %>
-        <% if answer_fields.object.question_id == 2 %>
+        <% if answer_fields.object.question_id == 3 %>
           <%= answer_fields.select :text, ["Sí", "No"], {}, { class: "form-control", data: { action: "change->questions#checkQuestion2", "questions-target": "question2" } }%>
-        <% elsif answer_fields.object.question_id == 3 %>
+        <% elsif answer_fields.object.question_id == 4 %>
           <div data-questions-target="question3" class="d-none">
             <%= answer_fields.text_field :text %>
           </div>
-        <% elsif answer_fields.object.question_id == 4 %>
-          <%= answer_fields.select :text, ["Sí", "No"], {}, { class: "form-control", data: { action: "change->questions#checkQuestion4", "questions-target": "question4" } }%>
         <% elsif answer_fields.object.question_id == 5 %>
-          <div data-questions-target="question5" class="d-none">
-            <%= answer_fields.text_field :text %>
-          </div>
-        <% elsif answer_fields.object.question_id == 1 %>
           <%= answer_fields.select :text, ["Desayuno", "Snack", "Comida", "Cena"], {}, { class: "form-control" } %>
-
-          <% #aqui es donde empieza los multiselct del checkbox %>
         <% elsif answer_fields.object.question_id == 6 %>
+            <%= answer_fields.text_field :text %>
+
+        <% elsif answer_fields.object.question_id == 2 %>
+            <%= answer_fields.text_field :text %>
+
+        <% elsif answer_fields.object.question_id == 7 %>
+            <%= answer_fields.select :text, ["Sí", "No"], {}, class: "form-control" %>
+
+        <% elsif answer_fields.object.question_id == 8 %>
+            <%= answer_fields.select :text, ["Sí", "No"], {}, class: "form-control" %>
+          <% #aqui es donde empieza los multiselct del checkbox %>
+        <% elsif answer_fields.object.question_id == 1 %>
           <% options = [
             { emoji: '😃', text: 'Feliz' },
             { emoji: '😊', text: 'Tranquilo/a' },
@@ -56,16 +60,16 @@
           <% end %>
         <% #aqui se termina el multiselect de los checkboxes %>
 
-          <% elsif answer_fields.object.question_id == 7 %>
+          <% elsif answer_fields.object.question_id == 11 %>
             <%= answer_fields.select :text, ["Solo/a", "Pareja", "Familia", "Amigo/a(s)", "Compañero/a(s) de trabajo/escuela", "Grupo", "Otro"], {}, class: "form-control" %>
-          <% elsif answer_fields.object.question_id == 8 %>
-              <%= answer_fields.select :text, options_for_select((1..10).map { |i| ["#{i} - #{['Hambre extrema 😫', 'Mucha hambre 😤', 'Hambre 😋', 'Poca hambre 🤔', 'Neutral 😐', 'Casi lleno/a 😌', 'lleno/a y Satisfecho/a 😬', 'Muy lleno/a 😨', 'Muy lleno/a e Incomodo/a 😓', 'Satrurado/a 🤢'][i-1]}", i] }), {}, class: "form-control" %>
           <% elsif answer_fields.object.question_id == 9 %>
-            <%= answer_fields.select :text, options_for_select((1..10).map { |i| ["#{i} - #{['Hambre extrema 😫', 'Mucha hambre 😤', 'Hambre 😋', 'Poca hambre 🤔', 'Neutral 😐', 'Casi lleno/a 😌', 'lleno/a y Satisfecho/a 😬', 'Muy lleno/a 😨', 'Muy lleno/a e Incomodo/a 😓', 'Satrurado/a 🤢'][i-1]}", i] }), {}, class: "form-control" %>
+              <%= answer_fields.select :text, options_for_select((1..10).map { |i| ["#{i} - #{['Hambre extrema 😫', 'Mucha hambre 😤', 'Hambre 😋', 'Poca hambre 🤔', 'Neutral 😐', 'Casi lleno/a 😌', 'lleno/a y Satisfecho/a 😬', 'Muy lleno/a 😨', 'Muy lleno/a e Incomodo/a 😓', 'Satrurado/a 🤢'][i-1]}", i] }), {}, class: "form-control" %>
           <% elsif answer_fields.object.question_id == 10 %>
+            <%= answer_fields.select :text, options_for_select((1..10).map { |i| ["#{i} - #{['Hambre extrema 😫', 'Mucha hambre 😤', 'Hambre 😋', 'Poca hambre 🤔', 'Neutral 😐', 'Casi lleno/a 😌', 'lleno/a y Satisfecho/a 😬', 'Muy lleno/a 😨', 'Muy lleno/a e Incomodo/a 😓', 'Satrurado/a 🤢'][i-1]}", i] }), {}, class: "form-control" %>
+          <% elsif answer_fields.object.question_id == 9 %>
             <%= answer_fields.select :text, ["Sí", "No"], {}, class: "form-control" %>
           <% else %>
-            <%= answer_fields.hidden_field :question_id, value: 11 %>
+            <%= answer_fields.hidden_field :question_id, value: 12 %>
             <%= answer_fields.text_field :text %>
           <% end %>
                 <% end %>
