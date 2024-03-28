@@ -2,10 +2,14 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito:400,700|Work+Sans:400,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Encode+Sans+Expanded:wght@100;200;300;400;500;600;700;800;900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 
 // Define fonts for body and headers
-$body-font: "Montserrat", "Helvetica", "sans-serif";
-$headers-font: "Bebas Neue", "Helvetica", "sans-serif";
+$body-font: "DM Sans", "Helvetica", "sans-serif";
+$headers-font: "Encode Sans Expanded", "Helvetica", "sans-serif";
 
 // To use a font file (.woff) uncomment following lines
 // @font-face {
