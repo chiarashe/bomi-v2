@@ -10,8 +10,8 @@ class ReportsController < ApplicationController
 
   #aqui se crea el reporte con las respuestas del paciente
   def create
-    answer_1_text = params[:report][:answers_attributes]["1"][:text].join(', ')
-    params[:report][:answers_attributes]["1"][:text] = answer_1_text
+    answer_1_text = params[:report][:answers_attributes]["0"][:text].join(', ')
+    params[:report][:answers_attributes]["0"][:text] = answer_1_text
     @report = @patient.reports.build(report_params)
     authorize @report
     if @report.save

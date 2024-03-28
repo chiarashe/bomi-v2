@@ -1,82 +1,92 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-12 col-md-4 col-lg-4">
+    <div class="col-12 col-md-6 col-lg-6">
 
       <% #patient card information %>
-      <div class="card patient-report">
+      <div class="card patient-report mt-4">
         <div class="card-body">
-          <h3 class="card-title"><%= @patient.first_name %> <%= @patient.last_name %></h3>
+          <h4 class="card-title" style="margin-bottom: 20px;"><%= @patient.first_name %> <%= @patient.last_name %></h4>
           <p class="card-text" style="line-height: 1.0;"><strong>Fecha de nacimiento:</strong> <%= @patient.date_birth %></p>
           <p class="card-text" style="line-height: 1.0;"><strong>Número de telefono:</strong> <%= @patient.phone_number %></p>
           <p class="card-text" style="line-height: 1.0;"><strong>Correo:</strong> <%= @patient.email %></p>
           <p class="card-text" style="line-height: 1.0;"><strong>País:</strong> <%= @patient.location %></p>
         </div>
       </div>
-
-
-  <% #my recommendations card information %>
-    <div class="card recommendation-report mt-2">
-      <div class="card-body">
-        <% if current_user.is_a?(Doctor) %>
-          <div class="d-flex justify-content-between align-items-center flex-wrap">
-            <h3>Mis recomendaciones</h3>
-            <%= link_to "Agregar", new_doctor_report_recommendation_path(current_doctor, @report), class: "btn btn-outline-success rounded-pill ms-2", style: "padding-top: 2px; padding-bottom: 2px;" %>
-          </div>
-            <% if @recommendation.present? %>
-              <% @recommendations.each do |recommendation| %>
-                <h4 style="margin-bottom: 0;"><%= recommendation.title %></h4>
-                <p style="margin-top: 0; margin-bottom: 0;"><%= recommendation.comments %></p>
-                <div class="d-flex justify-content-end flex-wrap">
-                <%= link_to "Borrar", recommendation_path(recommendation), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn btn-outline-danger rounded-pill ms-2", style: "padding-top: 1px; padding-bottom: 1px; margin-top: 0;" %>
-                <%= link_to "Editar", edit_recommendation_path(recommendation), class: "btn btn-outline-primary rounded-pill ms-2", style: "padding-top: 1px; padding-bottom: 1px;" %>
-                </div>
-              <% end %>
-            <% else %>
-              <p>No hay recomendaciones.</p>
-          <% end %>
-        <% end %>
-      </div>
-     </div>
-
-
-  <% #recommendations from other doctors card information %>
-
-    <div class="card recommendation-report mt-2">
-      <div class="card-body">
-        <h3>Recomendaciones de otros profesionales:</h3>
-        <% @patient.doctors.where.not(id: current_doctor.id).each do |doctor| %>
-          <h4 style="margin-top: 0; margin-bottom: 0;">Doctor: <%= doctor.first_name %> <%= doctor.last_name %></h4>
-          <% doctor.recommendations.where(patient: @patient).each do |recommendation| %>
-            <p style="margin-top: 0; margin-bottom: 0;"><%= recommendation.title %></p>
-            <p style="margin-top: 0; margin-bottom: 0;"><%= recommendation.comments %></p>
-            <hr style="margin-top: 5px; margin-bottom: 5px;">
-          <% end %>
-        <% end %>
-      </div>
     </div>
 
-
-  <% #medicines card information %>
-
-    <div class="card medicine-report mt-2">
-      <div class="card-body">
-        <h3> Medicinas: </h3>
-        <% @patient.medicines.each do |medicine| %>
-          <p style="margin-top: 0; margin-bottom: 0;">Nombre: <strong><%= medicine.name %></strong> - Dosis: <strong><%= medicine.dosage %></strong></p>
-          <p style="margin-top: 0; margin-bottom: 0;">Frecuencia: <%= medicine.times_a_day %> - Duración: <%= medicine.duration %></p>
-          <p style="margin-top: 0; margin-bottom: 0;">Del <%= medicine.start_date %> al <%= medicine.end_date %></p>
-          <p style="margin-top: 0; margin-bottom: 0;">Recomendado por: <%= medicine.recommended_by %></p>
-          <hr style="margin-top: 5px; margin-bottom: 5px;">
-        <% end %>
+    <% #medicines card information %>
+    <div class="col-12 col-md-6">
+      <div class="card medicine-report mt-4">
+        <div class="card-body scrollable-card-body">
+          <h4> 💊 Medicinas: </h4>
+          <% @patient.medicines.each do |medicine| %>
+            <p style="margin-top: 0; margin-bottom: 0;">Nombre: <strong><%= medicine.name %></strong> - Dosis: <strong><%= medicine.dosage %></strong> - Frecuencia: <strong><%= medicine.times_a_day %></strong></p>
+            <p style="margin-top: 0; margin-bottom: 0;">Del <%= medicine.start_date %> al <%= medicine.end_date %></p>
+            <p style="margin-top: 0; margin-bottom: 0;">Recomendado por: <%= medicine.recommended_by %></p>
+            <hr style="margin-top: 5px; margin-bottom: 5px;">
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
 
 
+<div class="row">
+  <div class="col-12 col-md-6 col-lg-6">
+    <% #my recommendations card information %>
+      <div class="card recommendation-report mt-3">
+        <div class="card-body scrollable-card-2">
+          <% if current_user.is_a?(Doctor) %>
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+              <h4> 👉 Mis recomendaciones</h4>
+              <%= link_to '<i class="fa-solid fa-plus"></i>'.html_safe, new_doctor_report_recommendation_path(current_doctor, @report), class: "btn btn-outline-success rounded-pill ms-2", style: "padding-top: 2px; padding-bottom: 2px;" %>
+            </div>
+              <% if @recommendation.present? %>
+                <% @recommendations.each do |recommendation| %>
+                  <h5 style="margin-bottom: 0;"><%= recommendation.title %></h5>
+                  <p style="margin-top: 0; margin-bottom: 0;"><%= recommendation.comments %></p>
+                  <% if recommendation.link_content.present? %>
+                    <%= link_to 'Liga ->', recommendation.link_content, style: "margin-top: 0; margin-bottom: 0;" %>
+                  <% end %>
+                  <div class="d-flex justify-content-end flex-wrap">
+                    <%= link_to '<i class="fa-solid fa-trash"></i>'.html_safe, recommendation_path(recommendation), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn btn-sm btn-outline-danger rounded-pill ms-2", style: "padding-top: 1px; padding-bottom: 1px; margin-top: 0;" %>
+                    <%= link_to '<i class="fa-solid fa-pen"></i>'.html_safe, edit_recommendation_path(recommendation), class: "btn btn-sm btn-outline-primary rounded-pill ms-2", style: "padding-top: 1px; padding-bottom: 1px;" %>
+                  </div>
+                <% end %>
+              <% else %>
+                <p>No hay recomendaciones.</p>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+
+    <% #recommendations from other doctors card information %>
+    <div class="col-12 col-md-6 col-lg-6">
+      <div class="card recommendation-report mt-3">
+        <div class="card-body scrollable-card-2">
+          <h4> 👉 Recomendaciones de otros profesionales:</h4>
+          <% @patient.doctors.where.not(id: current_doctor.id).each do |doctor| %>
+            <h5 style="margin-top: 0; margin-bottom: 0;">Doctor: <%= doctor.first_name %> <%= doctor.last_name %></h5>
+            <% doctor.recommendations.where(patient: @patient).each do |recommendation| %>
+              <p style="margin-top: 0; margin-bottom: 0;"><%= recommendation.title %></p>
+              <p style="margin-top: 0; margin-bottom: 0;"><%= recommendation.comments %></p>
+              <% if recommendation.link_content.present? %>
+                <%= link_to 'Liga ->', recommendation.link_content, style: "margin-top: 0; margin-bottom: 0;" %>
+              <% end %>
+              <hr style="margin-top: 5px; margin-bottom: 5px;">
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
  <% #filter %>
-  <div class="col-12 col-md-8 col-lg-8">
-      <div class="d-flex justify-content-between mb-3">
+  <div class="col-12 col-md-12 col-lg-12">
+      <div class="d-flex justify-content-between mt-4 mb-3">
           <h3>Filtro</h3>
         <%= form_tag('', method: :get) do %>
         <label for="start_date">Fecha de inicio:</label>
@@ -87,114 +97,79 @@
         <% end %>
       </div>
 
-<div class="row">
-  <div class="col-12 col-md-6 col-lg-6">
-      <h3> 🚩Atención </h3>
-    <div class="card red-flag-atracon">
-      <div class="card-body">
-        <h4>Atracones</h4>
-          <% if @yes_dates_atracon.empty? %>
-            <p>Sin registros</p>
-          <% else %>
-            <% start_date = params[:start_date].to_date rescue nil %>
-            <% end_date = params[:end_date].to_date rescue nil %>
-            <% filtered_dates = @yes_dates_atracon.select { |date| date && date >= start_date && date <= end_date } if start_date && end_date %>
-            <% filtered_dates ||= @yes_dates_atracon %>
-            <% filtered_dates.each do |date| %>
-          <% if date %>
-            <% report = Report.find_by(date: date, patient_id: @patient.id) %>
-            <% answer_1 = Answer.find_by(report_id: report.id, question_id: 1) %>
-            <% answer_6 = Answer.find_by(report_id: report.id, question_id: 6) %>
-            <% answer_11 = Answer.find_by(report_id: report.id, question_id: 11) %>
-            <p style="margin-top: 0; margin-bottom: 0;">El <%= date.strftime("%Y-%m-%d") %> durante <%= answer_1 ? answer_1.text : 'Not found' %> </p>
-            <p style="margin-top: 0; margin-bottom: 0;">Te sentiste <%= answer_6 ? answer_6.text : 'Not found' %></p>
-            <p style="margin-top: 0; margin-bottom: 0;">Tus pensamientos: <%= answer_11 ? answer_11.text : 'Not found' %></p>
-            <hr style="margin-top: 5px; margin-bottom: 5px;">
-          <% end %>
-          <% end %>
-          <% end %>
-        </div>
-      </div>
-
-
-      <div class="card red-flag-recomendacion mt-2">
-        <div class="card-body">
-          <h4>Sin seguir las recomendaciones</h4>
-          <% if @no_dates_recomendacion.empty? %>
-            <p>Sin registros</p>
-          <% else %>
-            <% start_date = params[:start_date].to_date rescue nil %>
-            <% end_date = params[:end_date].to_date rescue nil %>
-            <% filtered_dates = @no_dates_recomendacion.select { |date| date && date >= start_date && date <= end_date } if start_date && end_date %>
-            <% filtered_dates ||= @no_dates_recomendacion %>
-            <% filtered_dates.each do |date| %>
+    <div class="row">
+      <div class="col-12 col-md-6 col-lg-6">
+        <div class="card red-flag-atracon mb-3">
+          <div class="card-body scrollable-card-3">
+            <h4>🚩Atención </h4>
+              <% if @yes_dates_atracon.empty? %>
+                <p>Sin registros</p>
+              <% else %>
+                <% start_date = params[:start_date].to_date rescue nil %>
+                <% end_date = params[:end_date].to_date rescue nil %>
+                <% filtered_dates = @yes_dates_atracon.select { |date| date && date >= start_date && date <= end_date } if start_date && end_date %>
+                <% filtered_dates ||= @yes_dates_atracon %>
+                <% filtered_dates.each do |date| %>
               <% if date %>
                 <% report = Report.find_by(date: date, patient_id: @patient.id) %>
                 <% answer_1 = Answer.find_by(report_id: report.id, question_id: 1) %>
-                <% answer_5 = Answer.find_by(report_id: report.id, question_id: 5) %>
-                <% answer_6 = Answer.find_by(report_id: report.id, question_id: 6) %>
-                <p style="margin-top: 0; margin-bottom: 0;">El <%= date.strftime("%Y-%m-%d") %> durante <%= answer_1 ? answer_1.text : 'Not found' %></p>
-                <p style="margin-top: 0; margin-bottom: 0;">Te sentiste <%= answer_6 ? answer_6.text : 'Not found' %></p>
-                <p style="margin-top: 0; margin-bottom: 0;">Porque: <%= answer_5 ? answer_5.text : 'Not found' %></p>
+                <% answer_12 = Answer.find_by(report_id: report.id, question_id: 12) %>
+                <p style="margin-top: 0; margin-bottom: 0;">El <%= date.strftime("%Y-%m-%d") %> reportaste comer de forma descontrolada donde te sentirte <%= answer_1 ? answer_1.text : 'Not found' %></p>
+                <p style="margin-top: 0; margin-bottom: 0;">Tus pensamientos: <%= answer_12 ? answer_12.text : 'Not found' %></p>
                 <hr style="margin-top: 5px; margin-bottom: 5px;">
               <% end %>
-            <% end %>
-          <% end %>
+              <% end %>
+              <% end %>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
 
 
-    <div class="col-12 col-md-6 col-lg-6">
-      <h3> 🎉 Logros</h3>
-      <div class="card report-completed">
-        <div class="card-body">
-          <div>
-            <h4>Reportes completados</h4>
-            <%
-              if params[:start_date].present? && params[:end_date].present?
-                start_date = Date.parse(params[:start_date])
-                end_date = Date.parse(params[:end_date])
-                total_reports = Report.where(patient_id: @patient.id, created_at: start_date.beginning_of_day..end_date.end_of_day).count
-                yes_answers = Report.joins(:answers).where(patient_id: @patient.id, created_at: start_date.beginning_of_day..end_date.end_of_day, answers: { question_id: 4, text: "Sí" }).count
-              else
-                total_reports = Report.where(patient_id: @patient.id).count
-                yes_answers = Report.joins(:answers).where(patient_id: @patient.id, answers: { question_id: 4, text: "Sí" }).count
-              end
-            %>
-            <p>Completaste el reporte <%= total_reports %> veces</p>
-            <p>Seguiste las recomendaciones <%= yes_answers %> veces</p>
+        <div class="col-12 col-md-6 col-lg-6">
+          <div class="card report-completed">
+            <div class="card-body scrollable-card-3">
+              <div>
+                <h4>🎉 Logros</h4>
+                <%
+                  if params[:start_date].present? && params[:end_date].present?
+                    start_date = Date.parse(params[:start_date])
+                    end_date = Date.parse(params[:end_date])
+                    total_reports = Report.where(patient_id: @patient.id, created_at: start_date.beginning_of_day..end_date.end_of_day).count
+                    yes_answers = Report.joins(:answers).where(patient_id: @patient.id, created_at: start_date.beginning_of_day..end_date.end_of_day, answers: { question_id: 4, text: "Sí" }).count
+                  else
+                    total_reports = Report.where(patient_id: @patient.id).count
+                    yes_answers = Report.joins(:answers).where(patient_id: @patient.id, answers: { question_id: 4, text: "Sí" }).count
+                  end
+                %>
+                <p>Completaste el reporte <%= total_reports %> veces donde pudiste alimentarte  <%= @si_count_3 %> veces </p>
+
+                <% if @yes_dates_question_8.empty? %>
+                  <p>Sin registros</p>
+                <% else %>
+                  <% start_date = params[:start_date].to_date rescue nil %>
+                  <% end_date = params[:end_date].to_date rescue nil %>
+                  <% filtered_dates = @yes_dates_question_8.select { |date| date && date >= start_date && date <= end_date } if start_date && end_date %>
+                  <% filtered_dates ||= @yes_dates_question_8 %>
+                  <% filtered_dates.each do |date| %>
+                    <% if date %>
+                      <% report = Report.find_by(date: date, patient_id: @patient.id) %>
+                      <% answer_1 = Answer.find_by(report_id: report.id, question_id: 1) %>
+                      <% answer_8 = Answer.find_by(report_id: report.id, question_id: 8) %>
+                      <% if answer_8 && answer_8.text == 'Sí' %>
+                        <p style="margin-top: 0; margin-bottom: 0;">El <%= date.strftime("%Y-%m-%d") %> reportaste comer de forma balanceada y sentirte <%= answer_1 ? answer_1.text : 'Not found' %></p>
+                        <hr style="margin-top: 5px; margin-bottom: 5px;">
+                      <% end %>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="card report-completed mt-2">
-        <div class="card-body">
-          <h4>Emociones </h4>
-            <% if @emociones_positivas.empty? %>
-              <p>No dates found</p>
-            <% else %>
-              <% filtered_dates = @emociones_positivas.select { |date| Report.exists?(date: date, patient_id: @patient.id) } %>
-              <% filtered_dates.each do |date| %>
-                <% if date %>
-                  <% report = Report.find_by(date: date, patient_id: @patient.id) %>
-                  <% answer_1 = Answer.find_by(report_id: report.id, question_id: 1) %>
-                  <% answer_8 = Answer.find_by(report_id: report.id, question_id: 8) %>
-                  <% answer_9 = Answer.find_by(report_id: report.id, question_id: 9) %>
-                  <p>Fecha: <%= date.strftime("%Y-%m-%d") %></p>
-                  <p>Tipo de comida: <%= answer_1 ? answer_1.text : 'Not found' %></p>
-                  <p>Hambre: <%= answer_8 ? answer_8.text : 'Not found' %></p>
-                  <p>Saciedad: <%= answer_9 ? answer_9.text : 'Not found' %></p>
-                <% end %>
-              <% end %>
-            <% end %>
-        </div>
-      </div>
     </div>
   </div>
-  </div>
-  </div>
-</div>
+
 
 
 
@@ -206,55 +181,109 @@
       <h3>Grafícas</h3>
 
       <div class="row">
-        <% # tuviste un atracón graficas %>
-        <div class="col-12 col-md-6 p-2">
-          <h4>Atracones?</h4>
-          <%= pie_chart({"No" => @no_count_10, "Sí" => @si_count_10}, width: "200px", height: "200px") %>
-        </div>
 
-        <div class="col-12 col-md-6 p-2">
-          <h4>Atracones vs tipo de comida?</h4>
-          <%= column_chart @data_10, xtitle: "Tipo de Comida", ytitle: "Yes/No", width: "350px", height: "250px" %>
-        </div>
+    <% # comiste de forma descontrolada graficas %>
+    <div class="col-12 col-md-4 p-2 d-flex flex-column align-items-center" style="overflow: auto; word-wrap: break-word;">
+      <div>
+        <h5>¿Comiste de forma descontrolada?</h5>
       </div>
+      <div>
+        <%= pie_chart({"No" => @no_count_7, "Sí" => @si_count_7}, width: "150px", height: "150px", colors: ["#FF0000", "#00FF00"]) %>
+      </div>
+    </div>
+
+    <% # comiste de forma balanceada graficas %>
+    <div class="col-12 col-md-4 p-2 d-flex flex-column align-items-center" style="overflow: auto; word-wrap: break-word;">
+      <div>
+        <h5>¿Comiste de forma balanceada?</h5>
+      </div>
+      <div>
+        <%= pie_chart({"No" => @no_count_8, "Sí" => @si_count_8}, width: "150px", height: "150px", colors: ["#FF0000", "#00FF00"]) %>
+      </div>
+    </div>
+
+    <% # Emociones graficas %>
+    <div class="col-12 col-md-4 p-2 d-flex flex-column align-items-center" style="overflow: auto; word-wrap: break-word;">
+      <div>
+        <h5>Emociones</h5>
+      </div>
+      <div>
+        <%= pie_chart(@emotion_counts, width: "200px", height: "200px", library: { legend: { display: false } }) %>
+      </div>
+    </div>
+
 
       <% # Hambre saciedad emociones graficas %>
       <div class="row">
         <div class="col-12 col-md-6 p-5">
-          <%= scatter_chart @answers_8.zip(@answers_9), xtitle: "Hambre", ytitle: "Saciedad" %>
+          <h5>Hambre y Saciedad</h5>
+          <%= scatter_chart @scatter_data, xtitle: "Hambre", ytitle: "Saciedad", height: "300px", width: "400px" %>
         </div>
 
         <% # Grafica completado diario %>
         <div class="col-12 col-md-6 p-5">
-          <%= line_chart Report.where(patient_id: @patient.id).group_by_day(:created_at).count %>
+          <h5>Diarios completados</h5>
+          <%= line_chart Report.where(patient_id: @patient.id).group_by_day(:created_at).count, height: "300px", width: "400px" %>
         </div>
+
       </div>
     </div>
   </div>
 </div>
 
-<div class="container">
-  <table>
-    <tr>
-      <th>Sentimientos</th>
-      <th>Pensamientos</th>
-    </tr>
-    <% Report.where(patient_id: @patient.id).where(created_at: start_date..end_date).each do |report| %>
-      <% answer_6 = Answer.find_by(report_id: report.id, question_id: 6) %>
-      <% answer_11 = Answer.find_by(report_id: report.id, question_id: 11) %>
-      <tr>
-        <td><%= answer_6 ? answer_6.text : 'Not found' %></td>
-        <td><%= answer_11 ? answer_11.text : 'Not found' %></td>
-      </tr>
-    <% end %>
-  </table>
+  <div class="card graphs mt-3">
+    <div class="card-body">
+      <h3>Reflexiones</h3>
+        <table class="styled-table">
+          <tr>
+            <th>Sentimientos</th>
+            <th>Que te hizo sentir asi?</th>
+            <th>Pensamientos</th>
+          </tr>
+          <% Report.where(patient_id: @patient.id).where(created_at: start_date..end_date).each do |report| %>
+            <% answer_1 = Answer.find_by(report_id: report.id, question_id: 1) %>
+            <% answer_2 = Answer.find_by(report_id: report.id, question_id: 2) %>
+            <% answer_12 = Answer.find_by(report_id: report.id, question_id: 12) %>
+            <tr>
+              <td><%= answer_1 ? answer_1.text : 'Not found' %></td>
+              <td><%= answer_2 ? answer_2.text : 'Not found' %></td>
+              <td><%= answer_12 ? answer_12.text : 'Not found' %></td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+
+
+  <div class="card graphs mt-3">
+    <div class="card-body">
+      <h3>Balance en comidas</h3>
+        <table class="styled-table">
+          <tr>
+            <th>Sentimientos</th>
+            <th>Comidas</th>
+            <th>Balance</th>
+          </tr>
+          <% Report.where(patient_id: @patient.id).where(created_at: start_date..end_date).each do |report| %>
+            <% answer_1 = Answer.find_by(report_id: report.id, question_id: 1) %>
+            <% answer_6 = Answer.find_by(report_id: report.id, question_id: 6) %>
+            <% answer_8 = Answer.find_by(report_id: report.id, question_id: 8) %>
+            <tr>
+              <td><%= answer_1 ? answer_1.text : 'Not found' %></td>
+              <td><%= answer_6 ? answer_6.text : 'Not found' %></td>
+              <td><%= answer_8 ? answer_8.text : 'Not found' %></td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
 
   <% #answers  %>
-  <div class="container mt-4">
-    <div class="card graphs">
+
+    <div class="card graphs mt-4 d-flex-wrap" style="max-height: 500px; overflow-y: auto;">
       <div class="card-body">
       <h3>Respuestas</h3>
-        <table class="table">
+        <table class="styled-table">
           <thead>
             <tr>
               <th>Pregunta</th>
@@ -278,7 +307,3 @@
       </div>
     </div>
   </div>
-
-</div>
-</div>
-</div>

@@ -50,11 +50,72 @@ class SharedController < ApplicationController
     @answers = @answers.where('reports.date >= ?', start_date) if start_date
     @answers = @answers.where('reports.date <= ?', end_date) if end_date
 
-#pie chart yes/no alimentarte
-    @no_count_2 = @answers.where(question_id: 2, text: "No").count
-    @si_count_2 = @answers.where(question_id: 2, text: "Sí").count
+#pie chart yes/no descontrol
+    answers = @answers.where(question_id: 7)
+    @no_count_7 = answers.where(text: 'No').count
+    @si_count_7 = answers.where(text: 'Sí').count
 
-#bar chart alimentarte vs tipo de comida
+#pie chart yes/no balance
+    answers = @answers.where(question_id: 8)
+    @no_count_8 = answers.where(text: 'No').count
+    @si_count_8 = answers.where(text: 'Sí').count
+
+#pie chart emotions
+    # Fetch answers for question id 1 within the date range
+    answers = @answers.where(question_id: 1)
+    answers = answers.where('answers.created_at >= ?', start_date) if start_date
+    answers = answers.where('answers.created_at <= ?', end_date) if end_date
+
+    # Split text (emotion) of each answer into individual emotions and count them
+    emotion_counts = Hash.new(0)
+    answers.each do |answer|
+      emotions = answer.text.downcase.split(', ')
+      emotions.each { |emotion| emotion_counts[emotion] += 1 }
+    end
+
+    @emotion_counts = emotion_counts
+
+    # Count the number of times the answer was "Enojado"
+    @enojado_count = emotion_counts['enojado']
+
+    # Fetch answers for question id 9 within the date range
+    @answers_9 = Answer.where(question_id: 9)
+    @answers_9 = @answers_9.where('created_at >= ?', start_date) if start_date
+    @answers_9 = @answers_9.where('created_at <= ?', end_date) if end_date
+
+
+    # Fetch answers for question id 10 within the date range
+    @answers_10 = Answer.where(question_id: 10)
+
+  #alimentarte
+    # Fetch answers for question id 3 within the date range
+    answers_3 = @answers.where(question_id: 3)
+    answers_3 = answers_3.where('answers.created_at >= ?', start_date) if start_date
+    answers_3 = answers_3.where('answers.created_at <= ?', end_date) if end_date
+
+    # Count the number of times the answer was "Sí"
+    @si_count_3 = answers_3.where(text: 'Sí').count
+
+  #number of yes of balance
+    # Fetch answers for question id 3 within the date range
+    answers_8 = @answers.where(question_id: 8)
+    answers_8 = answers_8.where('answers.created_at >= ?', start_date) if start_date
+    answers_8 = answers_8.where('answers.created_at <= ?', end_date) if end_date
+
+    # Count the number of times the answer was "Sí"
+    @si_count_8 = answers_8.where(text: 'Sí').count
+    @yes_dates_question_8 = Answer.joins(:report).where(patient_id: @patient.id, question_id: 8, text: "Sí").pluck('reports.date')
+
+  #scatter chart
+    # Fetch answers for question id 9 and 10
+    answers_9 = @answers.where(question_id: 9)
+    answers_10 = @answers.where(question_id: 10)
+
+    # Create an array of arrays, where each sub-array represents a point and contains two values: the value of answer id 9 and the value of answer id 10
+    @scatter_data = answers_9.zip(answers_10).map { |a, b| [a.text.to_i, b.text.to_i] }
+
+
+  #bar chart alimentarte vs tipo de comida
     answer_counts = @answers.where(patient_id: @patient.id, question_id: 2).group(:text).count
     @no_count = answer_counts['No'] || 0
     @si_count = answer_counts['Sí'] || 0
@@ -64,8 +125,8 @@ class SharedController < ApplicationController
     @comida_count = meal_counts['Comida'] || 0
     @cena_count = meal_counts['Cena'] || 0
 
-    @answers_8 = @answers.where(question_id: 8).pluck(:text)
-    @answers_9 = @answers.where(question_id: 9).pluck(:text)
+
+
     @food_type = @answers.where(question_id: 1).pluck(:text) # Assuming question_id 1 is "Tipo de Comida"
     @yes_no = @answers.where(question_id: 2).pluck(:text) # Assuming question_id 2 is "Yes/No"# Assuming question_id 2 is "Yes/No"
 
@@ -75,8 +136,7 @@ class SharedController < ApplicationController
     @si_count_10 = @answers.where(patient_id: @patient.id, question_id: 10, text: 'Sí').count
 
 
-    @yes_no_10 = @answers.where(patient_id: @patient.id, question_id: 10).pluck(:text)
-    @data_10 = @yes_no_10.zip(@food_type).group_by(&:itself).transform_values(&:count)
+
 
     @emotion_type = @answers.where(patient_id: @patient.id, question_id: 6).pluck(:text)
     @hunger_type = @answers.where(patient_id: @patient.id, question_id: 8).pluck(:text)
@@ -95,7 +155,7 @@ class SharedController < ApplicationController
     end
 
   #red flags/green flags
-    @yes_dates_atracon = Answer.joins(:report).where(patient_id: @patient.id, question_id: 10, text: "Sí").pluck('reports.date')
+    @yes_dates_atracon = Answer.joins(:report).where(patient_id: @patient.id, question_id: 7, text: "Sí").pluck('reports.date')
     @no_dates_alimentacion = Answer.joins(:report).where(patient_id: @patient.id, question_id: 2, text: "No").pluck('reports.date')
     @no_dates_recomendacion = Answer.joins(:report).where(patient_id: @patient.id, question_id: 4, text: "No").pluck('reports.date')
     @emociones_positivas = Answer.joins(:report).where(patient_id: @patient.id, question_id: 6, text: "5").pluck('reports.date')
